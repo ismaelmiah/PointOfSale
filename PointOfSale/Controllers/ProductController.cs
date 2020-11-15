@@ -17,7 +17,8 @@ namespace PointOfSale.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            var allProducts = _uow.Product.GetAll(includeProperties: "Category");
+            return View(allProducts);
         }
 
         public IActionResult Create()
