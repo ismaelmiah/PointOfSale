@@ -20,7 +20,7 @@ namespace PointOfSale.Controllers
             return View();
         }
 
-        public IActionResult Upsert()
+        public IActionResult Create()
         {
             var product = new ProductVm()
             {
@@ -35,10 +35,10 @@ namespace PointOfSale.Controllers
         }
 
         [HttpPost]
-        public IActionResult Upsert(ProductVm productvm)
+        public IActionResult Create(ProductVm productVm)
         {
-            if (!ModelState.IsValid) return View(productvm);
-            _uow.Product.Add(productvm.Product);
+            if (!ModelState.IsValid) return View(productVm);
+            _uow.Product.Add(productVm.Product);
             _uow.Save();
             return RedirectToAction(nameof(Index));
         }

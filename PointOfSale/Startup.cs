@@ -1,4 +1,5 @@
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
@@ -24,6 +25,7 @@ namespace PointOfSale
             this.Configuration = builder.Build();
         }
         public IConfiguration Configuration { get; }
+        public static ILifetimeScope AutofacContainer { get; private set; }
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule(new WebModule());
@@ -44,6 +46,7 @@ namespace PointOfSale
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            AutofacContainer = app.ApplicationServices.GetAutofacRoot();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
