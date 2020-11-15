@@ -1,0 +1,88 @@
+﻿@model ProductVm
+@{
+    ViewData["Title"] = "Add Product";
+    Layout = "~/Views/Shared/_AdminLTECustom.cshtml";
+    const string imageStyle = "border-radius:3px; border: 1px solid gray;";
+}
+
+
+<form method="post" enctype="multipart/form-data">
+    <div class="row p-3 border">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-8 pt-4">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Product.Name"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Product.Name" class="form-control" />
+                    <span asp-validation-for="Product.Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Product.Description"></label>
+                </div>
+                <div class="col-8">
+                    <textarea asp-for="Product.Description" class=" form-control"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Product.BuyPrice"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Product.BuyPrice" class="form-control" />
+                    <span asp-validation-for="Product.BuyPrice" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Product.SalePrice"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Product.SalePrice" class="form-control" />
+                    <span asp-validation-for="Product.SalePrice" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label class="col-form-label">Category</label>
+                </div>
+                <div class="col-8">
+                    @*@Html.DropDownListFor(m => m.Product.CategoryId, Model.CategoryList, "-Select a Category", new { @class = "form-control" })*@
+                    <select asp-for="Product.CategoryId" asp-items="Model.CategoryList">
+                    </select>
+                    <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Product.Photo"></label>
+                </div>
+                <div class="col-8">
+                    <input type="file" asp-for="Product.Photo" id="uploadBox" multiple class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-8 offset-4">
+                    <div class="row">
+                        <div class="col">
+                            <button type="submit" onclick="return validateInput()" class="btn btn-primary form-control">Create</button>
+                        </div>
+                        <div class="col">
+                            <a asp-action="Index" class="btn btn-success form-control">Back To List</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-3 offset-1 pt-4">
+            <img id="imageupload" src="~/Images/noImage.png" width="100%" style="@imageStyle" alt="No Image" />
+        </div>
+
+    </div>
+</form>

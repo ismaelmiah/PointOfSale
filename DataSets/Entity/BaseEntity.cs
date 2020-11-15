@@ -7,6 +7,7 @@ namespace DataSets.Entity
 {
     public class BaseEntity
     {
+        [Key]
         public Guid Id { get; set; }
         [Required(ErrorMessage = "Name is required!")]
         public string Name { get; set; }
