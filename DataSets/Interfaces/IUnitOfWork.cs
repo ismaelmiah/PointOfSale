@@ -6,6 +6,7 @@ namespace DataSets.Interfaces
     {
         ICategory Category { get; }
         IProduct Product { get; }
+        IOrderDetails OrderDetails { get; }
         void Save();
     }
 }

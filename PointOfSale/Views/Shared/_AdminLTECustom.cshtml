@@ -14,11 +14,11 @@
     -->
 
 
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" type="text/css" href="~/css/jquery-ui.min.css" />
     <link rel="stylesheet" type="text/css" href="~/css/dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="~/css/toastr.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" type="text/css" href="~/css/font-awesome.css" />
 
     <link rel="stylesheet" href="~/css/adminlte.min.css">
@@ -63,6 +63,14 @@
                     <hr />
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
+                        <li class="nav-item menu-open">
+                            <a asp-controller="Order" asp-action="Index" class="nav-link">
+                                <i class="nav-icon fab fa-buffer"></i>
+                                <p>
+                                    Sales
+                                </p>
+                            </a>
+                        </li>
                         <li class="nav-item menu-open">
                             <a asp-controller="Category" asp-action="Index" class="nav-link">
                                 <i class="nav-icon fab fa-buffer"></i>

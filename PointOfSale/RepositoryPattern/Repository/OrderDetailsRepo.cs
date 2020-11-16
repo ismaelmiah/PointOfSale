@@ -4,10 +4,10 @@ using PointOfSale.Data;
 
 namespace PointOfSale.RepositoryPattern.Repository
 {
-    public class OrderDetailsRepository : Repository<OrderDetails>, IOrderDetails
+    public class OrderDetailsRepo : Repository<OrderDetails>, IOrderDetails
     {
         private readonly ApplicationDbContext _db;
-        public OrderDetailsRepository(ApplicationDbContext db) : base(db)
+        public OrderDetailsRepo(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
