@@ -28,7 +28,7 @@ function loadDataTable() {
                                 <a href="/Category/Edit/${data}" class="btn btn-warning text-white" style="cursor:pointer">
                                     <i class="fas fa-edit"></i> 
                                 </a>
-                                <a href="/Category/Details/${data}" class="btn btn-success text-white" style="cursor:pointer">
+                                <a href="/Category/Details/${data}" class="btn btn-info text-white" style="cursor:pointer">
                                     <i class="fas fa-info-circle"></i> 
                                 </a>
                             </div>

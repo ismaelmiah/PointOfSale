@@ -9,12 +9,11 @@ namespace DataSets.Entity
         [Key]
         public Guid Id { get; set; }
 
-        [Required]
-        public Guid ProductId { get; set; }
-
         [ForeignKey("ProductId ")]
+        public Guid ProductId { get; set; }
         public Product Product { get; set; }
         public int Count { get; set; }
         public double Price { get; set; }
+        public string SaleDate { get; set; }
     }
 }

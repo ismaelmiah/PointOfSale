@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using DataSets.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using DataSets.Interfaces;
@@ -17,6 +19,7 @@ namespace PointOfSale.Controllers
         public IActionResult GetAllData()
         {
             var allOrders = _uow.OrderDetails.GetAll(includeProperties: "Product");
+            //var OrderWithCategory = _uow.Category.Get()
             return Json(new { data = allOrders });
         }
         public IActionResult Index()
@@ -24,16 +27,40 @@ namespace PointOfSale.Controllers
             return View();
         }
 
-        // GET: OrderController/Details/5
-        public IActionResult Details(Guid id)
+        [HttpGet]
+        public IActionResult Create(Guid id)
         {
-            return View();
+            var product = _uow.Product.GetFirstOrDefault(x => x.Id == id & x.Quantity>0);
+            if (product == null) return Json(new { success = false, message = "Product Stock Out" });
+
+            var sale = new OrderDetails()
+            {
+                Count = 1,
+                Price = product.SalePrice,
+                Product = product,
+                SaleDate = DateTime.Now.ToString(CultureInfo.InvariantCulture)
+            };
+            _uow.OrderDetails.Add(sale);
+            _uow.Save();
+            
+            product.Quantity -= 1;
+            _uow.Product.Update(product);
+            _uow.Save();
+            return Json(new { success = true, message = "Sale Operation Successfully" });
+
         }
-        
-        // POST: OrderController/Delete/5
+
         [HttpDelete]
-        public IActionResult Delete(int id, IFormCollection collection)
+        public IActionResult Delete(Guid id)
         {
+            var record = _uow.OrderDetails.Get(id);
+            if(record == null ) return Json(new { success = false, message = "Record Not Available, Check Database" });
+            _uow.OrderDetails.Remove(id);
+            _uow.Save();
+            var modifiedProduct = _uow.Product.Get(record.ProductId);
+            modifiedProduct.Quantity += 1;
+            _uow.Product.Update(modifiedProduct);
+            _uow.Save();
             return Json(new { success = true, message = "Delete Operation Successfully" });
         }
     }
