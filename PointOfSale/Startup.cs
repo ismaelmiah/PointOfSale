@@ -73,6 +73,10 @@ namespace PointOfSale
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+            
+                endpoints.MapControllerRoute(
+                    name: "order",
+                    pattern: "{controller=Order}/{action=Index}/{id}/{quantity}");
                 endpoints.MapRazorPages();
             });
         }

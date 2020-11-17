@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using DataSets.Interfaces;
-using PointOfSale.Models;
 using PointOfSale.RepositoryPattern.Repository;
+using PointOfSale.Services;
 
 namespace PointOfSale.Modules
 {
@@ -10,7 +10,9 @@ namespace PointOfSale.Modules
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().SingleInstance();
-            builder.RegisterType<ProductVm>().AsSelf().SingleInstance();
+            builder.RegisterType<CategoryServices>().AsSelf().SingleInstance();
+            builder.RegisterType<ProductServices>().AsSelf().SingleInstance();
+            builder.RegisterType<OrderServices>().AsSelf().SingleInstance();
             base.Load(builder);
         }
     }

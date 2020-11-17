@@ -75,16 +75,21 @@ function Delete(url) {
 }
 
 function Sale(url) {
+    var input = document.createElement("input");
+    input.value = '1';
+    input.type = 'text';
+    input.className = 'swal-content__input';
     swal({
         title: 'Quantity',
-        content: "input",
+        content: input,
         buttons: true,
-        dangerMode:true
+        dangerMode: true
     }).then((value) => {
         if (value) {
+            url += `/${input.value}`;
             $.ajax({
                 type: "Get",
-                url: url ,
+                url: url,
                 success: function (data) {
                     if (data.success) {
                         window.toastr.success(data.message);

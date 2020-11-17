@@ -15,6 +15,7 @@ function loadDataTable() {
             { "data": "saleDate", "width": "10%" },
             { "data": "product.name", "width": "20%" },
             { "data": "count", "width": "10%" },
+            { "data": "product.salePrice", "width": "10%" },
             { "data": "price", "width": "10%" },
             {
                 "data": "id",

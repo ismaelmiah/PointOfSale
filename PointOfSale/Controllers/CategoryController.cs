@@ -1,25 +1,21 @@
 ﻿using System;
-using System.IO;
-using DataSets.Interfaces;
-using Microsoft.AspNetCore.Hosting;
+using Autofac;
 using Microsoft.AspNetCore.Mvc;
 using PointOfSale.Models;
+using PointOfSale.Services;
 
 namespace PointOfSale.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly IUnitOfWork _uow;
-        private readonly IWebHostEnvironment _hostEnvironment;
-
-        public CategoryController(IUnitOfWork uow, IWebHostEnvironment hostEnvironment)
+        private readonly CategoryServices _categoryServices;
+        public CategoryController()
         {
-            _uow = uow;
-            _hostEnvironment = hostEnvironment;
+            _categoryServices = Startup.AutofacContainer.Resolve<CategoryServices>();
         }
         public IActionResult GetAllData()
         {
-            var allCategories = _uow.Category.GetAll(includeProperties: "Products");
+            var allCategories = _categoryServices.GetAllCategory();
             return Json(new { data = allCategories });
         }
         public IActionResult Index()
@@ -37,54 +33,32 @@ namespace PointOfSale.Controllers
         public IActionResult Create(CategoryViewModel categoryViewModel)
         {
             if (!ModelState.IsValid) return View(categoryViewModel);
-            _uow.Category.Add(categoryViewModel.category);
-            _uow.Save();
+            _categoryServices.CreateCategoryPost(categoryViewModel);
             return RedirectToAction(nameof(Index));
         }
         public IActionResult Edit(Guid id)
         {
-            var model = _uow.Category.GetFirstOrDefault(x => x.Id == id);
-
-            var categoryViewModel = new CategoryViewModel()
-            {
-                category = model
-            };
-            return View(categoryViewModel);
+            return View(_categoryServices.EditCategoryGet(id));
         }
         [HttpPost]
         public IActionResult Edit(CategoryViewModel categoryViewModel)
         {
             if (!ModelState.IsValid) return View(categoryViewModel);
-            _uow.Category.Update(categoryViewModel.category);
-            _uow.Save();
+            _categoryServices.EditCategoryPost(categoryViewModel);
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Details(Guid id)
         {
-            var model = _uow.Category.GetFirstOrDefault(x => x.Id == id, includeProperties: "Products");
+            var model = _categoryServices.DetailsCategory(id);
             return View(model);
         }
         [HttpDelete]
         public IActionResult Delete(Guid id)
         {
-            var deleteData = _uow.Category.GetFirstOrDefault(x => x.Id == id);
-            if (deleteData == null)
-                return Json(new { success = false, message = "Data Not Found!" });
-
-            if (deleteData.ImageUrl != null)
-            {
-                var webRootPath = _hostEnvironment.WebRootPath;
-                var imagePath = Path.Combine(webRootPath, deleteData.ImageUrl.TrimStart('\\'));
-
-                if (System.IO.File.Exists(imagePath))
-                {
-                    System.IO.File.Delete(imagePath);
-                }
-            }
-            _uow.Category.Remove(deleteData);
-            _uow.Save();
-            return Json(new { success = true, message = "Delete Operation Successfully" });
+            return (Json(_categoryServices.DeleteCategory(id)
+                ? new {success = false, message = "Category Not Found!"}
+                : new {success = true, message = "Delete Operation Successfully"}));
         }
     }
 }
