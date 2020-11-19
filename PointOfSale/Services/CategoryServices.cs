@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using DataSets.Entity;
 using DataSets.Interfaces;
 using Microsoft.AspNetCore.Hosting;
@@ -19,7 +20,13 @@ namespace PointOfSale.Services
         }
         public IEnumerable<Category> GetAllCategory()
         {
-            return _uow.Category.GetAll(includeProperties: "Products");
+            var categories = _uow.Category.GetAll(includeProperties: "Products").ToList();
+            foreach (var category in categories)
+            {
+                var count= category.Products.Where(x => x.CategoryId == category.Id).Select(y=> y.Quantity).Sum();
+                category.NoOfProduct = count;
+            }
+            return categories;
         }
         public void CreateCategoryPost(CategoryViewModel categoryViewModel)
         {

@@ -16,6 +16,7 @@ namespace PointOfSale.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
+        public DbSet<Account> Accounts { get; set; }
 
     }
 }

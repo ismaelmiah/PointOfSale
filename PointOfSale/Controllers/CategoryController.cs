@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Autofac;
 using Microsoft.AspNetCore.Mvc;
 using PointOfSale.Models;

@@ -14,9 +14,8 @@ function loadDataTable() {
         "columns": [
             { "data": "name", "width": "10%" },
             { "data": "description", "width": "20%" },
-            { "data": "products.length", "width": "15%" },
-            { "data": "description", "width": "20%" },
-            { "data": "products.length", "width": "20%" },
+            { "data": "noOfProduct", "width": "15%" },
+            { "data": "invest", "width": "20%" },
             {
                 "data": "id",
                 "render": function (data) {

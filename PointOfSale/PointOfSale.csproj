@@ -10,6 +10,8 @@
   <ItemGroup>
     <Compile Remove="Data\Migrations\20201117101044_Alter OrderDetails.cs" />
     <Compile Remove="Data\Migrations\20201117101044_Alter OrderDetails.Designer.cs" />
+    <Compile Remove="Data\Migrations\20201119072107_Added Account entity and SaleCout to Category.cs" />
+    <Compile Remove="Data\Migrations\20201119072107_Added Account entity and SaleCout to Category.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

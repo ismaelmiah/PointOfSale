@@ -13,7 +13,7 @@ namespace DataSets.Entity
         [DisplayName("Sale Price")]
         [Required(ErrorMessage = "Sale Price is required!")]
         public double SalePrice { get; set; }
-        public double Quantity { get; set; }
+        public int Quantity { get; set; }
 
         [ForeignKey("Category")]
         public Guid CategoryId { get; set; }
