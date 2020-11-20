@@ -4,6 +4,6 @@ namespace PointOfSale.Models
 {
     public class CategoryViewModel
     {
-        public Category category { get; set; }
+        public Category Category { get; set; }
     }
 }

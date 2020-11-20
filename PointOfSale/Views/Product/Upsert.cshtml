@@ -7,6 +7,7 @@
         @if (!Model.Product.Id.Equals(default(Guid)))
         {
             <input type="hidden" asp-for="Product.Id" />
+            <input type="hidden" asp-for="Product.CategoryId"/>
         }
         <div class="col-12 row">
             <div class="col-sm-3 row">
@@ -36,17 +37,20 @@
                     <span asp-validation-for="Product.Quantity" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-sm-3 row">
-                <div class="col-4">
-                    <label class="col-form-label">Category</label>
+            @if (Model.Product.Id.Equals(default(Guid)))
+            {
+                <div class="col-sm-3 row">
+                    <div class="col-4">
+                        <label class="col-form-label">Category</label>
+                    </div>
+                    <div class="col-8">
+                        @*@Html.DropDownListFor(m => m.Product.CategoryId, Model.CategoryList, "-Select a Category", new { @class = "form-control" })*@
+                        <select asp-for="Product.CategoryId" asp-items="Model.CategoryList" class="form-control">
+                        </select>
+                        <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="col-8">
-                    @*@Html.DropDownListFor(m => m.Product.CategoryId, Model.CategoryList, "-Select a Category", new { @class = "form-control" })*@
-                    <select asp-for="Product.CategoryId" asp-items="Model.CategoryList" class="form-control">
-                    </select>
-                    <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
-                </div>
-            </div>
+            }
             <div class="col-sm-2 ml-1 row">
                 @if (!Model.Product.Id.Equals(default(Guid)))
                 {

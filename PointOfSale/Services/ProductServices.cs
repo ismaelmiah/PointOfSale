@@ -15,10 +15,13 @@ namespace PointOfSale.Services
 
         private readonly IUnitOfWork _uow;
         private readonly IWebHostEnvironment _hostEnvironment;
-        public ProductServices(IUnitOfWork uow, IWebHostEnvironment hostEnvironment)
+        private readonly CategoryServices _categoryServices;
+
+        public ProductServices(IUnitOfWork uow, IWebHostEnvironment hostEnvironment, CategoryServices categoryServices)
         {
             _uow = uow;
             _hostEnvironment = hostEnvironment;
+            _categoryServices = categoryServices;
         }
 
         public IEnumerable<Product> GetAllProducts()
@@ -45,6 +48,12 @@ namespace PointOfSale.Services
         public void CreatePost(ProductViewModel productViewModel)
         {
             _uow.Product.Add(productViewModel.Product);
+            _uow.Save();
+            var model = _categoryServices.EditCategoryGet(productViewModel.Product.CategoryId);
+            model.Category.Invest += ((productViewModel.Product.Quantity) * (productViewModel.Product.Price));
+            model.Category.NoOfProduct += productViewModel.Product.Quantity;
+            model.Category.StockProduct += productViewModel.Product.Quantity;
+            _uow.Category.Update(model.Category);
             _uow.Save();
         }
 
@@ -83,6 +92,12 @@ namespace PointOfSale.Services
         {
             var deleteData = _uow.Product.GetFirstOrDefault(x => x.Id == id);
             if (deleteData == null) return false;
+            var categoryModel = _uow.Category.GetFirstOrDefault(x => x.Id == deleteData.CategoryId);
+            categoryModel.Invest -= ((deleteData.Quantity) * (deleteData.Price));
+            categoryModel.NoOfProduct -= deleteData.Quantity;
+            categoryModel.StockProduct -= deleteData.Quantity;
+            categoryModel.DateOfEntry = DateTime.Now;
+            //TODO: Product Delete and Change on Category Too.
             _uow.Product.Remove(deleteData);
             _uow.Save();
             return true;

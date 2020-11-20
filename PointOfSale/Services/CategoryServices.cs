@@ -23,31 +23,36 @@ namespace PointOfSale.Services
             var categories = _uow.Category.GetAll(includeProperties: "Products").ToList();
             foreach (var category in categories)
             {
-                var sum = category.Products.Sum(x => x.Price);
-                var count= category.Products.Where(x => x.CategoryId == category.Id).Select(y=> y.Quantity).Sum();
-                category.NoOfProduct = count;
-                category.Invest = sum;
+                //var sum = category.Products.Sum(x => x.Price);
+                //var count= category.Products.Select(y=> y.Quantity).Sum();
+                //category.StockProduct = count;
+                //category.Invest = sum;
             }
             return categories;
         }
+        public CategoryViewModel CreateCategoryGet()
+        {
+            var model = new CategoryViewModel(){Category = new Category()};
+            return model;
+        }
         public void CreateCategoryPost(CategoryViewModel categoryViewModel)
         {
-            _uow.Category.Add(categoryViewModel.category);
+            _uow.Category.Add(categoryViewModel.Category);
             _uow.Save();
         }
-        public CategoryViewModel EditCategoryGet(Guid id)
+        public CategoryViewModel EditCategoryGet(Guid? id)
         {
             var model = _uow.Category.GetFirstOrDefault(x => x.Id == id);
 
             var categoryViewModel = new CategoryViewModel()
             {
-                category = model
+                Category = model
             };
             return categoryViewModel;
         }
         public void EditCategoryPost(CategoryViewModel categoryViewModel)
         {
-            _uow.Category.Update(categoryViewModel.category);
+            _uow.Category.Update(categoryViewModel.Category);
             _uow.Save();
         }
         public Category DetailsCategory(Guid id)

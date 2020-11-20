@@ -13,9 +13,10 @@ function loadDataTable() {
         "retrieve": true,
         "columns": [
             { "data": "name", "width": "10%" },
-            { "data": "description", "width": "20%" },
             { "data": "noOfProduct", "width": "15%" },
-            { "data": "invest", "width": "20%" },
+            { "data": "stockProduct", "width": "20%" },
+            { "data": "invest", "width": "20%" },   
+            { "data": "sales", "width": "20%" },
             {
                 "data": "id",
                 "render": function (data) {
@@ -23,9 +24,6 @@ function loadDataTable() {
                             <div class="text-center">
                                 <a onclick=Delete("/Category/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
                                     <i class="fas fa-trash-alt"></i> 
-                                </a>
-                                <a href="/Category/Edit/${data}" class="btn btn-warning text-white" style="cursor:pointer">
-                                    <i class="fas fa-edit"></i> 
                                 </a>
                                 <a href="/Category/Details/${data}" class="btn btn-info text-white" style="cursor:pointer">
                                     <i class="fas fa-info-circle"></i> 

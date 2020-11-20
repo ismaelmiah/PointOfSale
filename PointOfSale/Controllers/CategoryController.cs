@@ -19,36 +19,28 @@ namespace PointOfSale.Controllers
             var allCategories = _categoryServices.GetAllCategory();
             return Json(new { data = allCategories });
         }
-        public IActionResult Index()
+        public IActionResult Data(Guid? id)
         {
-            return View();
-        }
-
-        public IActionResult Create()
-        {
-            return View(new CategoryViewModel());
+            if (id == null)
+            {
+                return View(_categoryServices.CreateCategoryGet());
+            }
+            var model = _categoryServices.EditCategoryGet(id);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CategoryViewModel categoryViewModel)
+        public IActionResult Upsert(CategoryViewModel categoryViewModel)
         {
             if (!ModelState.IsValid) return View(categoryViewModel);
-            _categoryServices.CreateCategoryPost(categoryViewModel);
-            return RedirectToAction(nameof(Index));
+            if (!categoryViewModel.Category.Id.Equals(default(Guid)))
+            {
+                _categoryServices.EditCategoryPost(categoryViewModel);
+            }
+            else _categoryServices.CreateCategoryPost(categoryViewModel);
+            return RedirectToAction(nameof(Data));
         }
-        public IActionResult Edit(Guid id)
-        {
-            return View(_categoryServices.EditCategoryGet(id));
-        }
-        [HttpPost]
-        public IActionResult Edit(CategoryViewModel categoryViewModel)
-        {
-            if (!ModelState.IsValid) return View(categoryViewModel);
-            _categoryServices.EditCategoryPost(categoryViewModel);
-            return RedirectToAction(nameof(Index));
-        }
-
         public IActionResult Details(Guid id)
         {
             var model = _categoryServices.DetailsCategory(id);
@@ -58,8 +50,8 @@ namespace PointOfSale.Controllers
         public IActionResult Delete(Guid id)
         {
             return (Json(_categoryServices.DeleteCategory(id)
-                ? new {success = false, message = "Category Not Found! / Delete All Products"}
-                : new {success = true, message = "Delete Operation Successfully"}));
+                ? new { success = true, message = "Delete Operation Successfully" }
+                : new { success = false, message = "Category Not Found! / Delete All Products" }));
         }
     }
 }

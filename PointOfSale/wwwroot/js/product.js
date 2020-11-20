@@ -17,14 +17,10 @@ function loadDataTable() {
             { "data": "price", "width": "10%" },
             { "data": "quantity", "width": "15%" },
             {
-//                { Id: 'id', polNotes: ' policyNotes' }
                 "data": "id",
                 "render": function (data) {
                     return `
                             <div class="text-center">
-                                <a onclick=Delete("/Product/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
-                                    <i class="fas fa-trash-alt"></i> 
-                                </a>
                                 <a href="/Product/Data/${data}" class="btn btn-warning text-white" style="cursor:pointer">
                                     <i class="fas fa-edit"></i> 
                                 </a>

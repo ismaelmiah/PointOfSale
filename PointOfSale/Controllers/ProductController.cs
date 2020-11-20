@@ -35,7 +35,7 @@ namespace PointOfSale.Controllers
         {
             if (!ModelState.IsValid) return View(productVm);
             if (!productVm.Product.Id.Equals(default(Guid)))
-            {//TODO: Check Update Product
+            {
                 _productServices.EditProductPost(productVm);
             }
             else _productServices.CreatePost(productVm);
@@ -54,8 +54,8 @@ namespace PointOfSale.Controllers
         public IActionResult Delete(Guid id)
         {
             return Json(_productServices.DeleteProduct(id) 
-            ? new { success = true, message = "Delete Operation Successfully"}
-            : new { success = false, message = "Data Not Found!" });
+            ? new { success = true, message = "Product Deleted Successfully"}
+            : new { success = false, message = "Product Not Found!" });
         }
     }
 }
