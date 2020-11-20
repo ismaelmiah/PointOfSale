@@ -50,12 +50,12 @@ namespace PointOfSale.Services
             };
             return categoryViewModel;
         }
-        public void EditCategoryPost(CategoryViewModel categoryViewModel)
+        public void EditCategoryPost(CategoryViewModel categoryViewModel)//TODO: Category Edit Configure again for all aspects
         {
             _uow.Category.Update(categoryViewModel.Category);
             _uow.Save();
         }
-        public Category DetailsCategory(Guid id)
+        public Category DetailsCategory(Guid id)//TODO: Details of Category with All Invest, Sales and Products List
         {
            return _uow.Category.GetFirstOrDefault(x => x.Id == id, includeProperties: "Products");
         }

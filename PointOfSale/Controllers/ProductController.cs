@@ -40,7 +40,6 @@ namespace PointOfSale.Controllers
             }
             else _productServices.CreatePost(productVm);
             return RedirectToAction(nameof(Data));
-
         }
 
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using Microsoft.AspNetCore.Mvc;
+using PointOfSale.Models;
 using PointOfSale.Services;
 
 namespace PointOfSale.Controllers
@@ -23,10 +24,10 @@ namespace PointOfSale.Controllers
             return View();
         }
 
-        [HttpGet]
-        public IActionResult Create(Guid id, int quantity)
+        [HttpPost]
+        public IActionResult Create(ProductViewModel productViewModel)
         {
-            return Json(_orderServices.SaleProduct(id,quantity) 
+            return Json(_orderServices.SaleProduct(productViewModel) 
                 ? new { success = true, message = "Sale Operation Successfully" } 
                 : new { success = false, message = "Product Stock Out" });
         }

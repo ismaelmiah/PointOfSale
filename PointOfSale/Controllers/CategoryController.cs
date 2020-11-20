@@ -36,6 +36,7 @@ namespace PointOfSale.Controllers
             if (!ModelState.IsValid) return View(categoryViewModel);
             if (!categoryViewModel.Category.Id.Equals(default(Guid)))
             {
+                //TODO: Updated Category must have others fields update value not null value
                 _categoryServices.EditCategoryPost(categoryViewModel);
             }
             else _categoryServices.CreateCategoryPost(categoryViewModel);
