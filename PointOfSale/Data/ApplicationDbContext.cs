@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DataSets.Entity;
+﻿using DataSets.Entity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,8 +12,8 @@ namespace PointOfSale.Data
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<OrderDetails> OrderDetails { get; set; }
-        public DbSet<Account> Accounts { get; set; }
+        public DbSet<SalesDetails> SalesDetails { get; set; }
+        public DbSet<MonthDetails> MonthDetails { get; set; }
 
     }
 }

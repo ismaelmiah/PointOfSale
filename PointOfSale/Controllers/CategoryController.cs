@@ -58,7 +58,7 @@ namespace PointOfSale.Controllers
         public IActionResult Delete(Guid id)
         {
             return (Json(_categoryServices.DeleteCategory(id)
-                ? new {success = false, message = "Category Not Found!"}
+                ? new {success = false, message = "Category Not Found! / Delete All Products"}
                 : new {success = true, message = "Delete Operation Successfully"}));
         }
     }

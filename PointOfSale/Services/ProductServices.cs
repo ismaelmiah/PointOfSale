@@ -26,43 +26,48 @@ namespace PointOfSale.Services
             return _uow.Product.GetAll(includeProperties: "Category");
         }
 
-        public ProductVm CreateGet()
+        public ProductViewModel CreateGet()
         {
-            var product = new ProductVm()
+            var categories = _uow.Category.GetAll().ToList();
+            var product = new ProductViewModel()
             {
                 Product = new Product(),
-                CategoryList = _uow.Category.GetAll().Select(i => new SelectListItem()
+                CategoryList = from c in categories select new SelectListItem
                 {
-                    Text = i.Name,
-                    Value = i.Id.ToString()
-                })
+                    Text = c.Name,
+                    Value = c.Id.ToString()
+                }
             };
+
             return product;
         }
 
-        public void CreatePost(ProductVm productVm)
+        public void CreatePost(ProductViewModel productViewModel)
         {
-            _uow.Product.Add(productVm.Product);
+            _uow.Product.Add(productViewModel.Product);
             _uow.Save();
         }
 
-        public ProductVm EditProductGet(Guid id)
+        public ProductViewModel EditProductGet(Guid? id)
         {
             var model = _uow.Product.GetFirstOrDefault(x => x.Id == id);
             if (model == null) return null;
-            var product = new ProductVm()
+            var categories = _uow.Category.GetAll().ToList();
+
+            var product = new ProductViewModel()
             {
                 Product = model,
-                CategoryList = _uow.Category.GetAll().Select(i => new SelectListItem()
-                {
-                    Text = i.Name,
-                    Value = i.Id.ToString()
-                })
+                CategoryList = from c in categories
+                    select new SelectListItem
+                    {
+                        Text = c.Name,
+                        Value = c.Id.ToString()
+                    }
             };
             return product;
         }
 
-        public void EditProductPost(ProductVm productVm)
+        public void EditProductPost(ProductViewModel productVm)
         {
             _uow.Product.Update(productVm.Product);
             _uow.Save();
@@ -78,16 +83,6 @@ namespace PointOfSale.Services
         {
             var deleteData = _uow.Product.GetFirstOrDefault(x => x.Id == id);
             if (deleteData == null) return false;
-            if (deleteData.ImageUrl != null)
-            {
-                var webRootPath = _hostEnvironment.WebRootPath;
-                var imagePath = Path.Combine(webRootPath, deleteData.ImageUrl.TrimStart('\\'));
-
-                if (File.Exists(imagePath))
-                {
-                    File.Delete(imagePath);
-                }
-            }
             _uow.Product.Remove(deleteData);
             _uow.Save();
             return true;

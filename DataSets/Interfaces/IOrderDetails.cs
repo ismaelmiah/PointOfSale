@@ -2,8 +2,8 @@
 
 namespace DataSets.Interfaces
 {
-    public interface IOrderDetails : IRepository<OrderDetails>
+    public interface IOrderDetails : IRepository<SalesDetails>
     {
-        void Update(OrderDetails orderDetails);
+        void Update(SalesDetails orderDetails);
     }
 }

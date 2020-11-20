@@ -21,8 +21,7 @@ namespace PointOfSale.RepositoryPattern.Repository
         }
 
         public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null,
-            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null,
-            string includeProperties2Nd = null)
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null)
         {
             IQueryable<T> queryable = _dbSet;
             if (filter != null)
@@ -32,12 +31,6 @@ namespace PointOfSale.RepositoryPattern.Repository
 
             if (includeProperties == null) return queryable.ToList();
             queryable = includeProperties.Split(new[] {','},
-                StringSplitOptions.RemoveEmptyEntries)
-                .Aggregate(queryable, (current, item) 
-                    => current.Include(item));
-
-            if (includeProperties2Nd == null) return queryable.ToList();
-            queryable = includeProperties2Nd.Split(new[] {','},
                 StringSplitOptions.RemoveEmptyEntries)
                 .Aggregate(queryable, (current, item) 
                     => current.Include(item));

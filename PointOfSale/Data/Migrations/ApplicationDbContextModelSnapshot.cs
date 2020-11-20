@@ -19,43 +19,14 @@ namespace PointOfSale.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("DataSets.Entity.Account", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("Balance")
-                        .HasColumnType("float");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("Loss")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Profit")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("Accounts");
-                });
-
             modelBuilder.Entity("DataSets.Entity.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("DateOfEntry")
+                        .HasColumnType("Date");
 
                     b.Property<double>("Invest")
                         .HasColumnType("float");
@@ -67,34 +38,46 @@ namespace PointOfSale.Data.Migrations
                     b.Property<int>("NoOfProduct")
                         .HasColumnType("int");
 
+                    b.Property<double>("Sales")
+                        .HasColumnType("float");
+
+                    b.Property<int>("StockProduct")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("DataSets.Entity.OrderDetails", b =>
+            modelBuilder.Entity("DataSets.Entity.MonthDetails", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Price")
+                    b.Property<double>("Balance")
                         .HasColumnType("float");
 
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("SaleDate")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("DateOfDetails")
+                        .HasColumnType("Date");
+
+                    b.Property<double>("Invest")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Loss")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Profit")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("CategoryId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("MonthDetails");
                 });
 
             modelBuilder.Entity("DataSets.Entity.Product", b =>
@@ -103,34 +86,52 @@ namespace PointOfSale.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("BuyPrice")
-                        .HasColumnType("float");
-
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("DateOfEntry")
+                        .HasColumnType("Date");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
-
-                    b.Property<double>("SalePrice")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("DataSets.Entity.SalesDetails", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SaleDate")
+                        .HasColumnType("Date");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("SalesDetails");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -333,20 +334,11 @@ namespace PointOfSale.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("DataSets.Entity.Account", b =>
+            modelBuilder.Entity("DataSets.Entity.MonthDetails", b =>
                 {
                     b.HasOne("DataSets.Entity.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DataSets.Entity.OrderDetails", b =>
-                {
-                    b.HasOne("DataSets.Entity.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -356,6 +348,15 @@ namespace PointOfSale.Data.Migrations
                     b.HasOne("DataSets.Entity.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DataSets.Entity.SalesDetails", b =>
+                {
+                    b.HasOne("DataSets.Entity.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

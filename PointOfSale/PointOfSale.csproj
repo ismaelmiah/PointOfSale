@@ -12,6 +12,10 @@
     <Compile Remove="Data\Migrations\20201117101044_Alter OrderDetails.Designer.cs" />
     <Compile Remove="Data\Migrations\20201119072107_Added Account entity and SaleCout to Category.cs" />
     <Compile Remove="Data\Migrations\20201119072107_Added Account entity and SaleCout to Category.Designer.cs" />
+    <Compile Remove="Data\Migrations\20201119151956_Migrate Database Entity.cs" />
+    <Compile Remove="Data\Migrations\20201119151956_Migrate Database Entity.Designer.cs" />
+    <Compile Remove="Data\Migrations\20201119162953_DB entity.cs" />
+    <Compile Remove="Data\Migrations\20201119162953_DB entity.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

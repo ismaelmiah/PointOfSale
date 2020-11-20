@@ -7,15 +7,13 @@ namespace DataSets.Entity
 {
     public class Product : BaseEntity
     {
-        [DisplayName("Buying Price")]
-        [Required(ErrorMessage = "Buying Price is required!")]
-        public double BuyPrice { get; set; }
-        [DisplayName("Sale Price")]
-        [Required(ErrorMessage = "Sale Price is required!")]
-        public double SalePrice { get; set; }
+        [DisplayName("Price")]
+        [Required(ErrorMessage = "Price is required!")]
+        public double Price { get; set; }
+        [Required(ErrorMessage = "Quantity is required!")]
         public int Quantity { get; set; }
 
-        [ForeignKey("Category")]
+        [ForeignKey("CategoryId")]
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }
     }

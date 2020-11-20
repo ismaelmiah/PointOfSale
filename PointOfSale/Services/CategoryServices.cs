@@ -23,8 +23,10 @@ namespace PointOfSale.Services
             var categories = _uow.Category.GetAll(includeProperties: "Products").ToList();
             foreach (var category in categories)
             {
+                var sum = category.Products.Sum(x => x.Price);
                 var count= category.Products.Where(x => x.CategoryId == category.Id).Select(y=> y.Quantity).Sum();
                 category.NoOfProduct = count;
+                category.Invest = sum;
             }
             return categories;
         }
@@ -56,16 +58,6 @@ namespace PointOfSale.Services
         {
             var deleteData = _uow.Category.GetFirstOrDefault(x => x.Id == id);
             if (deleteData == null) return false;
-            if (deleteData.ImageUrl != null)
-            {
-                var webRootPath = _hostEnvironment.WebRootPath;
-                var imagePath = Path.Combine(webRootPath, deleteData.ImageUrl.TrimStart('\\'));
-
-                if (File.Exists(imagePath))
-                {
-                    File.Delete(imagePath);
-                }
-            }
             _uow.Category.Remove(deleteData);
             _uow.Save();
             return true;

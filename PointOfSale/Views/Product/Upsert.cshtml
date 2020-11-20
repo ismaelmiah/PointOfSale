@@ -1,0 +1,70 @@
+﻿@using Microsoft.AspNetCore.Razor.Language.Extensions
+@model ProductViewModel
+
+<form asp-controller="Product" asp-action="Upsert" method="post" enctype="multipart/form-data">
+    <div class="row p-3 border">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @if (!Model.Product.Id.Equals(default(Guid)))
+        {
+            <input type="hidden" asp-for="Product.Id" />
+        }
+        <div class="col-12 row">
+            <div class="col-sm-3 row">
+                <div class="col-3">
+                    <label asp-for="Product.Name"></label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="Product.Name" class="form-control" />
+                    <span asp-validation-for="Product.Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-2 row">
+                <div class="col-4">
+                    <label asp-for="Product.Price"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Product.Price" class="form-control" />
+                    <span asp-validation-for="Product.Price" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-2 row">
+                <div class="col-6">
+                    <label asp-for="Product.Quantity"></label>
+                </div>
+                <div class="col-6">
+                    <input asp-for="Product.Quantity" class="form-control" />
+                    <span asp-validation-for="Product.Quantity" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-3 row">
+                <div class="col-4">
+                    <label class="col-form-label">Category</label>
+                </div>
+                <div class="col-8">
+                    @*@Html.DropDownListFor(m => m.Product.CategoryId, Model.CategoryList, "-Select a Category", new { @class = "form-control" })*@
+                    <select asp-for="Product.CategoryId" asp-items="Model.CategoryList" class="form-control">
+                    </select>
+                    <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-2 ml-1 row">
+                @if (!Model.Product.Id.Equals(default(Guid)))
+                {
+                    <button type = "submit"
+                            onclick = "return validateInput()" class=
+                            "btn btn-warning form-control col" >Update</button>
+                    <button type="submit"
+                            onclick="location.href = '@Url.Action("Data", "Product")'" class="btn btn-primary form-control col ml-2">
+                        Reset
+                    </button>
+                }
+                else
+                {
+                    <button type = "submit"
+                            onclick = "return validateInput()" class=
+                            "btn btn-success form-control" >Add</button>
+                }
+            </div>
+        </div>
+    </div>
+</form>

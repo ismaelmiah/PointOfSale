@@ -19,8 +19,6 @@ namespace PointOfSale.RepositoryPattern.Repository
             var data = _db.Categories.FirstOrDefault(x => x.Id == category.Id);
             if (data == null) return;
             data.Name = category.Name;
-            data.Description = category.Description;
-            data.ImageUrl = category.ImageUrl;
             data.Products = category.Products;
         }
     }

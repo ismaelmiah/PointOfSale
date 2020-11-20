@@ -8,6 +8,6 @@ namespace PointOfSale.Models
     {
         public IEnumerable<SelectListItem> CategoryList { get; set; }
         public IEnumerable<SelectListItem> ProductList { get; set; }
-        public OrderDetails Details { get; set; }
+        public SalesDetails Details { get; set; }
     }
 }

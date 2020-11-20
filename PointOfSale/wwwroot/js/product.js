@@ -13,10 +13,8 @@ function loadDataTable() {
         "retrieve": true,
         "columns": [
             { "data": "name", "width": "20%" },
-            { "data": "description", "width": "10%" },
             { "data": "category.name", "width": "10%" },
-            { "data": "buyPrice", "width": "10%" },
-            { "data": "salePrice", "width": "10%" },
+            { "data": "price", "width": "10%" },
             { "data": "quantity", "width": "15%" },
             {
 //                { Id: 'id', polNotes: ' policyNotes' }
@@ -27,7 +25,7 @@ function loadDataTable() {
                                 <a onclick=Delete("/Product/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
                                     <i class="fas fa-trash-alt"></i> 
                                 </a>
-                                <a href="/Product/Edit/${data}" class="btn btn-warning text-white" style="cursor:pointer">
+                                <a href="/Product/Data/${data}" class="btn btn-warning text-white" style="cursor:pointer">
                                     <i class="fas fa-edit"></i> 
                                 </a>
                                 <a href="/Product/Details/${data}" class="btn btn-info text-white" style="cursor:pointer">

@@ -19,12 +19,12 @@ namespace PointOfSale.Services
         {
             var product = _uow.Product.GetFirstOrDefault(x => x.Id == id & x.Quantity >= quantity);
             if (product == null) return false;
-            var sale = new OrderDetails()
+            var sale = new SalesDetails()
             {
-                Count = quantity,
-                Price = quantity * product.SalePrice,
+                Quantity = quantity,
+                Price = quantity * product.Price,
                 Product = product,
-                SaleDate = DateTime.Now.ToString(CultureInfo.InvariantCulture)
+                //SaleDate = DateTime.Now.ToString(CultureInfo.InvariantCulture)
             };
             _uow.OrderDetails.Add(sale);
             _uow.Save();
@@ -40,15 +40,15 @@ namespace PointOfSale.Services
             var record = _uow.OrderDetails.Get(id);
             if (record == null) return false;
             _uow.OrderDetails.Remove(id);
-            _uow.Save();
             var modifiedProduct = _uow.Product.Get(record.ProductId);
-            modifiedProduct.Quantity += 1;
+            modifiedProduct.Quantity += record.Quantity;
+            _uow.Save();
             _uow.Product.Update(modifiedProduct);
             _uow.Save();
             return true;
         }
 
-        public IEnumerable<OrderDetails> GetAllRecords()
+        public IEnumerable<SalesDetails> GetAllRecords()
         {
             return _uow.OrderDetails.GetAll(includeProperties: "Product");
         }

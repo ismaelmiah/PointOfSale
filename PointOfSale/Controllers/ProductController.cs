@@ -18,38 +18,31 @@ namespace PointOfSale.Controllers
             var allProducts = _productServices.GetAllProducts();
             return Json(new { data = allProducts });
         }
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Data(Guid? id)
         {
-            return View();
-        }
-        public IActionResult Create()
-        {
-            return View(_productServices.CreateGet());
+            if (id == null)
+            {
+                return View(_productServices.CreateGet());
+            }
+            var model = _productServices.EditProductGet(id);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ProductVm productVm)
+        public IActionResult Upsert(ProductViewModel productVm)
         {
             if (!ModelState.IsValid) return View(productVm);
-            _productServices.CreatePost(productVm);
-            return RedirectToAction(nameof(Index));
+            if (!productVm.Product.Id.Equals(default(Guid)))
+            {//TODO: Check Update Product
+                _productServices.EditProductPost(productVm);
+            }
+            else _productServices.CreatePost(productVm);
+            return RedirectToAction(nameof(Data));
+
         }
 
-        public IActionResult Edit(Guid id)
-        {
-            return _productServices.EditProductGet(id) != null 
-                ? (IActionResult) View(_productServices.EditProductGet(id)) 
-                : NotFound(id);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(ProductVm productVm)
-        {
-            if (!ModelState.IsValid) return View(productVm);
-            _productServices.EditProductPost(productVm);
-            return RedirectToAction(nameof(Index));
-        }
 
         public IActionResult Details(Guid id)
         {
