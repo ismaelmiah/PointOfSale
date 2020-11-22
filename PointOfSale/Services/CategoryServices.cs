@@ -39,6 +39,19 @@ namespace PointOfSale.Services
         {
             _uow.Category.Add(categoryViewModel.Category);
             _uow.Save();
+
+            var monthDetails = new MonthDetails()
+            {
+                Balance = 0,
+                Category = categoryViewModel.Category,
+                DateOfDetails = DateTime.Today,
+                Invest = 0,
+                Profit = 0,
+                Loss = 0
+            };
+
+            _uow.MonthDetails.Add(monthDetails);
+            _uow.Save();
         }
         public CategoryViewModel EditCategoryGet(Guid? id)
         {
@@ -54,6 +67,19 @@ namespace PointOfSale.Services
         {
             _uow.Category.Update(categoryViewModel.Category);
             _uow.Save();
+
+            var monthDetails = new MonthDetails()
+            {
+                CategoryId = categoryViewModel.Category.Id,
+                Balance = 0,
+                Invest = categoryViewModel.Category.Invest,
+                Profit = 0,
+                Loss = 0
+            };
+
+            _uow.MonthDetails.Update(monthDetails);
+            _uow.Save();
+
         }
         public Category DetailsCategory(Guid id)//TODO: Details of Category with All Invest, Sales and Products List
         {

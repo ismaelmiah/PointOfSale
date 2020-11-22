@@ -24,19 +24,28 @@ function loadDataTable() {
             { "data": "quantity", "width": "15%" },
             {
                 "data": "id",
-                "render": function (data) {
-                    return `
+                "render": function (data, type, row) {
+                    if (row.quantity === 0){
+                        return `
                             <div class="text-center">
-                                <a href="/Product/Data/${data}" class="btn btn-warning text-white" style="cursor:pointer">
-                                    <i class="fas fa-edit"></i> 
-                                </a>
                                 <a href="/Product/Details/${data}" class="btn btn-info text-white" style="cursor:pointer">
-                                    <i class="fas fa-info-circle"></i> 
+                                    <i class="fas fa-info-circle"></i> DETAIL
                                 </a>
-                                <button type="button" class="btn btn-success" data-toggle="modal"
-                                data-target="#exampleModal" data-whatever="${data}" ><i class="fas fa-minus-circle"></i></button>\r\n
+                                <button type="button" disabled="disabled" class="btn btn-success" data-toggle="modal"
+                                data-target="#exampleModal" data-whatever="${data}" ><i class="fas fa-minus-circle"></i>Stock Out</button>\r\n
                             </div>
                            `;
+                    } else {
+                        return `
+                            <div class="text-center">
+                                <a href="/Product/Details/${data}" class="btn btn-info text-white" style="cursor:pointer">
+                                    <i class="fas fa-info-circle"></i> DETAIL
+                                </a>
+                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                data-target="#exampleModal" data-whatever="${data}" ><i class="fas fa-minus-circle"></i> SALE</button>\r\n
+                            </div>
+                           `;
+                    }
                 }, "width": "20%"
             }
         ],

@@ -49,12 +49,24 @@ namespace PointOfSale.Services
         {
             _uow.Product.Add(productViewModel.Product);
             _uow.Save();
+
             var model = _categoryServices.EditCategoryGet(productViewModel.Product.CategoryId);
             model.Category.Invest += ((productViewModel.Product.Quantity) * (productViewModel.Product.Price));
             model.Category.NoOfProduct += productViewModel.Product.Quantity;
             model.Category.StockProduct += productViewModel.Product.Quantity;
+
             _uow.Category.Update(model.Category);
             _uow.Save();
+
+
+
+            var monthDetails = _uow.MonthDetails.GetFirstOrDefault(x => x.CategoryId == model.Category.Id);
+            monthDetails.Invest += ((productViewModel.Product.Quantity) * (productViewModel.Product.Price));
+            monthDetails.Loss += ((productViewModel.Product.Quantity) * (productViewModel.Product.Price));
+
+            _uow.MonthDetails.Update(monthDetails);
+            _uow.Save();
+
         }
 
         public ProductViewModel EditProductGet(Guid? id)

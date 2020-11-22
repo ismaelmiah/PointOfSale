@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using DataSets.Entity;
 using DataSets.Interfaces;
 using PointOfSale.Models;
@@ -16,10 +15,10 @@ namespace PointOfSale.Services
             _uow = uow;
         }
 
-        public bool SaleProduct(ProductViewModel productViewModel)
+        public void SaleProduct(ProductViewModel productViewModel)
         {
             var product = _uow.Product.GetFirstOrDefault(x => x.Id == productViewModel.Product.Id & x.Quantity >= productViewModel.Product.Quantity);
-            if (product == null) return false;
+            if (product == null) return;
             var sale = new SalesDetails()
             {
                 Quantity = productViewModel.Product.Quantity,
@@ -37,10 +36,30 @@ namespace PointOfSale.Services
             var categories = _uow.Category.GetFirstOrDefault(x => x.Id == product.CategoryId);
             categories.StockProduct -= productViewModel.Product.Quantity;
             categories.Sales += sale.Price;
+
             _uow.Category.Update(categories);
             _uow.Save();
 
-            return true;
+            var monthDetails = _uow.MonthDetails.GetFirstOrDefault(x => x.CategoryId == categories.Id);
+            var profit = monthDetails.Loss - sale.Price;
+            if (profit < 0)
+            {
+                monthDetails.Loss = 0;
+                monthDetails.Profit = Math.Abs(profit);
+            }
+            else monthDetails.Loss = profit;
+
+            if (monthDetails.Loss == 0)
+            {
+                monthDetails.Balance = monthDetails.Invest + monthDetails.Profit;
+            }
+            else
+            {
+                monthDetails.Balance = monthDetails.Invest - monthDetails.Loss;
+            }
+
+            _uow.MonthDetails.Update(monthDetails);
+            _uow.Save();
         }
 
         public bool DeleteRecord(Guid id)
@@ -48,11 +67,7 @@ namespace PointOfSale.Services
             var record = _uow.OrderDetails.Get(id);
             if (record == null) return false;
             _uow.OrderDetails.Remove(id);
-            //var modifiedProduct = _uow.Product.Get(record.ProductId);
-            //modifiedProduct.Quantity += record.Quantity;
             _uow.Save();
-            //_uow.Product.Update(modifiedProduct);
-            //_uow.Save();
             return true;
         }
 

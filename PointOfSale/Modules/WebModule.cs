@@ -13,6 +13,7 @@ namespace PointOfSale.Modules
             builder.RegisterType<CategoryServices>().AsSelf().SingleInstance();
             builder.RegisterType<ProductServices>().AsSelf().SingleInstance();
             builder.RegisterType<OrderServices>().AsSelf().SingleInstance();
+            builder.RegisterType<MonthlyDetailServices>().AsSelf().SingleInstance();
             base.Load(builder);
         }
     }

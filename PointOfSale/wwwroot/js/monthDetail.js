@@ -8,7 +8,7 @@ $(document).ready(function () {
 function loadDataTable() {
     dataTable = $('#myTable').DataTable({
         "ajax": {
-            "url": "/Order/GetAllData"
+            "url": "/Administration/GetAllResult"
         },
         "retrieve": true,
         "columns": [

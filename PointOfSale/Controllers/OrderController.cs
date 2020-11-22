@@ -27,9 +27,8 @@ namespace PointOfSale.Controllers
         [HttpPost]
         public IActionResult Create(ProductViewModel productViewModel)
         {
-            return Json(_orderServices.SaleProduct(productViewModel) 
-                ? new { success = true, message = "Sale Operation Successfully" } 
-                : new { success = false, message = "Product Stock Out" });
+            _orderServices.SaleProduct(productViewModel);
+            return RedirectToAction("Data", "Product");
         }
 
         [HttpDelete]
