@@ -8,10 +8,10 @@ namespace PointOfSale.Controllers
 {
     public class OrderController : Controller
     {
-        private readonly OrderServices _orderServices;
+        private readonly SaleServices _orderServices;
         public OrderController()
         {
-            _orderServices = Startup.AutofacContainer.Resolve<OrderServices>();
+            _orderServices = Startup.AutofacContainer.Resolve<SaleServices>();
         }
 
         public IActionResult GetAllData()

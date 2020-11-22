@@ -2,7 +2,7 @@
 
 namespace DataSets.Interfaces
 {
-    public interface IOrderDetails : IRepository<SalesDetails>
+    public interface ISaleDetails : IRepository<SalesDetails>
     {
         void Update(SalesDetails orderDetails);
     }

@@ -6,11 +6,11 @@ using PointOfSale.Models;
 
 namespace PointOfSale.Services
 {
-    public class OrderServices
+    public class SaleServices
     {
         private IUnitOfWork _uow;
 
-        public OrderServices(IUnitOfWork uow)
+        public SaleServices(IUnitOfWork uow)
         {
             _uow = uow;
         }

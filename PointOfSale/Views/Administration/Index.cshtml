@@ -9,34 +9,8 @@
 {
     <br />
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col text-center">
             <h2 class="text-primary">Monthly Details</h2>
-        </div>
-        <div class="col-sm-6">
-            <form asp-action="Result" asp-controller="Administration" method="post" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="col-12 row">
-                    <div class="col-4">
-                        <select class="form-control" asp-items="Html.GetEnumSelectList<Month>()" asp-for="Month"></select>
-                        <span asp-validation-for="Month" class="text-danger"></span>
-                    </div>
-                    <div class="col-3 row">
-                        <select class="form-control" asp-for="Year">
-                            @for (int year = 2020; year < 2030; year++)
-                            {
-                                <option value="@year">@year</option>
-                            }
-                        </select>
-                        <span asp-validation-for="Year" class="text-danger"></span>
-                    </div>
-                    <div class="col-4 row ml-4">
-                        <button type="submit"
-                                onclick="return validateInput()" class="btn btn-success form-control">
-                            Search
-                        </button>
-                    </div>
-                </div>
-            </form>
         </div>
     </div>
 }
@@ -49,7 +23,7 @@
             <th>Profit</th>
             <th>Loss</th>
             <th>Balance</th>
-            <th>Month</th>
+            <th>MM/DD/YYYY</th>
         </tr>
         </thead>
         <tbody>

@@ -12,7 +12,7 @@ function loadDataTable() {
         },
         "retrieve": true,
         "columns": [
-            { "data": "saleDate", "width": "15%" },
+            { "data": "saleDate", "width": "20%" },
             { "data": "product.name", "width": "20%" },
             { "data": "quantity", "width": "10%" },
             { "data": "product.price", "width": "10%" },
@@ -27,7 +27,7 @@ function loadDataTable() {
                                 </a>
                             </div>
                            `;
-                }, "width": "15%"
+                }, "width": "10%"
             }
         ],
         "language": {

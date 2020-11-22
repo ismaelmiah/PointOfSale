@@ -40,11 +40,12 @@ namespace PointOfSale.Services
             _uow.Category.Add(categoryViewModel.Category);
             _uow.Save();
 
+            var todayDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 01);
             var monthDetails = new MonthDetails()
             {
                 Balance = 0,
                 Category = categoryViewModel.Category,
-                DateOfDetails = DateTime.Today,
+                DateOfDetails = todayDate,
                 Invest = 0,
                 Profit = 0,
                 Loss = 0

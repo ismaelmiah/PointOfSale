@@ -16,16 +16,9 @@ namespace PointOfSale.Controllers
         {
             var model = new MonthDetailViewModel()
             {
-                MonthDetails = _monthDetails.GetAllMonthDetails(),
+                MonthDetails = _monthDetails.GetAllMonthDetails()
             };
             return View(model);
-        }
-
-        [HttpPost]
-        public IActionResult Result(MonthDetailViewModel monthDetailView)
-        {
-            var model = _monthDetails.GetSpecificDetails(monthDetailView);
-            return RedirectToAction("Index", new { montView = new MonthDetailViewModel(){MonthDetails = model}});
         }
     }
 }

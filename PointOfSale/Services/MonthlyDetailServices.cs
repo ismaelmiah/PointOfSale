@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using DataSets.Entity;
 using DataSets.Interfaces;
@@ -64,7 +65,7 @@ namespace PointOfSale.Services
         {
             var month = MonthNumber(monthDetailViewModel.Month);
             var date = new DateTime(monthDetailViewModel.Year, month, 01);
-            var model = _uow.MonthDetails.GetAll().Where(x=> x.DateOfDetails.ToShortDateString()==date.ToShortDateString());
+            var model = _uow.MonthDetails.GetAll().Where(x=> x.DateOfDetails.ToShortDateString() == date.ToShortDateString());
             return model;
         }
 
