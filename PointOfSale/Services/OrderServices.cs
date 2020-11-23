@@ -26,7 +26,7 @@ namespace PointOfSale.Services
                 Product = product,
                 SaleDate = DateTime.Today
             };
-            _uow.OrderDetails.Add(sale);
+            _uow.SaleDetails.Add(sale);
             _uow.Save();
 
             product.Quantity -= productViewModel.Product.Quantity;
@@ -64,16 +64,16 @@ namespace PointOfSale.Services
 
         public bool DeleteRecord(Guid id)
         {
-            var record = _uow.OrderDetails.Get(id);
+            var record = _uow.SaleDetails.Get(id);
             if (record == null) return false;
-            _uow.OrderDetails.Remove(id);
+            _uow.SaleDetails.Remove(id);
             _uow.Save();
             return true;
         }
 
         public IEnumerable<SalesDetails> GetAllRecords()
         {
-            return _uow.OrderDetails.GetAll(includeProperties: "Product");
+            return _uow.SaleDetails.GetAll(includeProperties: "Product");
         }
     }
 }

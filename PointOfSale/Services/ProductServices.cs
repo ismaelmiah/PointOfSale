@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using DataSets.Entity;
 using DataSets.Interfaces;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PointOfSale.Models;
 
@@ -14,13 +12,11 @@ namespace PointOfSale.Services
     {
 
         private readonly IUnitOfWork _uow;
-        private readonly IWebHostEnvironment _hostEnvironment;
         private readonly CategoryServices _categoryServices;
 
-        public ProductServices(IUnitOfWork uow, IWebHostEnvironment hostEnvironment, CategoryServices categoryServices)
+        public ProductServices(IUnitOfWork uow, CategoryServices categoryServices)
         {
             _uow = uow;
-            _hostEnvironment = hostEnvironment;
             _categoryServices = categoryServices;
         }
 
@@ -47,6 +43,7 @@ namespace PointOfSale.Services
 
         public void CreatePost(ProductViewModel productViewModel)
         {
+            productViewModel.Product.DateOfEntry = DateTime.Today;
             _uow.Product.Add(productViewModel.Product);
             _uow.Save();
 
@@ -94,9 +91,16 @@ namespace PointOfSale.Services
             _uow.Save();
         }
 
-        public Product DetailsProduct(Guid id)
+        public ProductViewModel DetailsProduct(Guid id)
         {
-            var model = _uow.Product.GetFirstOrDefault(x => x.Id == id, includeProperties: "Category");
+            var product = _uow.Product.GetFirstOrDefault(x => x.Id == id, includeProperties: "Category");
+            var sales = _uow.SaleDetails.GetFirstOrDefault(x => x.ProductId == product.Id);
+            var model = new ProductViewModel()
+            {
+                Product = product,
+                SalesDetails = sales
+            };
+
             return model;
         }
 

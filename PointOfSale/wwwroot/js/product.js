@@ -18,10 +18,11 @@ function loadDataTable() {
         },
         "retrieve": true,
         "columns": [
-            { "data": "name", "width": "20%" },
+            { "data": "dateOfEntry", "width": "15%" },
+            { "data": "name", "width": "15%" },
             { "data": "category.name", "width": "10%" },
             { "data": "price", "width": "10%" },
-            { "data": "quantity", "width": "15%" },
+            { "data": "quantity", "width": "10%" },
             {
                 "data": "id",
                 "render": function (data, type, row) {
@@ -31,8 +32,8 @@ function loadDataTable() {
                                 <a href="/Product/Details/${data}" class="btn btn-info text-white" style="cursor:pointer">
                                     <i class="fas fa-info-circle"></i> DETAIL
                                 </a>
-                                <button type="button" disabled="disabled" class="btn btn-success" data-toggle="modal"
-                                data-target="#exampleModal" data-whatever="${data}" ><i class="fas fa-minus-circle"></i>Stock Out</button>\r\n
+                                <button type="button" disabled="disabled" class="btn btn-warning" data-toggle="modal"
+                                data-target="#exampleModal" data-whatever="${data}" ><i class="fas fa-minus-circle"></i> Stock Out</button>\r\n
                             </div>
                            `;
                     } else {

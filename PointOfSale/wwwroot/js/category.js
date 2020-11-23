@@ -12,11 +12,12 @@ function loadDataTable() {
         },
         "retrieve": true,
         "columns": [
+            { "data": "dateOfEntry", "width": "20%" },
             { "data": "name", "width": "10%" },
             { "data": "noOfProduct", "width": "15%" },
-            { "data": "stockProduct", "width": "20%" },
-            { "data": "invest", "width": "20%" },   
-            { "data": "sales", "width": "20%" },
+            { "data": "stockProduct", "width": "15%" },
+            { "data": "invest", "width": "10%" },   
+            { "data": "sales", "width": "10%" },
             {
                 "data": "id",
                 "render": function (data) {
@@ -30,7 +31,7 @@ function loadDataTable() {
                                 </a>
                             </div>
                            `;
-                }, "width": "20%"
+                }, "width": "10%"
             }
         ],
         "language": {

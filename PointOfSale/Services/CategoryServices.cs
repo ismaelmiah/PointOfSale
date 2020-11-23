@@ -37,6 +37,7 @@ namespace PointOfSale.Services
         }
         public void CreateCategoryPost(CategoryViewModel categoryViewModel)
         {
+            categoryViewModel.Category.DateOfEntry = DateTime.Today;
             _uow.Category.Add(categoryViewModel.Category);
             _uow.Save();
 

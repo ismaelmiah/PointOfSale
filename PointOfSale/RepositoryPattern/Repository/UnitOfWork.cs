@@ -11,12 +11,12 @@ namespace PointOfSale.RepositoryPattern.Repository
             _db = db;
             Product = new ProductRepo(_db);
             Category = new CategoryRepo(_db);
-            OrderDetails = new SaleDetailsRepo(_db);
+            SaleDetails = new SaleDetailsRepo(_db);
             MonthDetails = new MonthDetailsRepo(_db);
         }
         public ICategory Category { get; }
         public IProduct Product { get; }
-        public ISaleDetails OrderDetails { get; }
+        public ISaleDetails SaleDetails { get; }
         public IMonthDetails MonthDetails { get; }
 
         public void Dispose()

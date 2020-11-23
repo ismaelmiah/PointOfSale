@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
 using Autofac;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PointOfSale.Models;
 using PointOfSale.Services;
 
 namespace PointOfSale.Controllers
 {
+    [Authorize]
     public class CategoryController : Controller
     {
         private readonly CategoryServices _categoryServices;
@@ -47,6 +49,7 @@ namespace PointOfSale.Controllers
             var model = _categoryServices.DetailsCategory(id);
             return View(model);
         }
+
         [HttpDelete]
         public IActionResult Delete(Guid id)
         {
