@@ -1,2 +1,0 @@
-# PointOfSale
-A Mini Project
