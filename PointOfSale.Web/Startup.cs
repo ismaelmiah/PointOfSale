@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-
+using PointOfSale.Foundation;
 
 namespace PointOfSale.Web
 {
@@ -40,16 +40,16 @@ namespace PointOfSale.Web
         {
             var (connectionString, migrationAssemblyName) = ConnectionAndMigration();
 
-            //builder.RegisterModule(new FoundationModule(connectionString, migrationAssemblyName));
-            //builder.RegisterModule(new WebModule(connectionString, migrationAssemblyName));
+            builder.RegisterModule(new FoundationModule(connectionString, migrationAssemblyName));
+            builder.RegisterModule(new WebModule(connectionString, migrationAssemblyName));
             //builder.RegisterModule(new MembershipModule(connectionString, migrationAssemblyName));
         }
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // services.AddDbContext<ApplicationDbContext>(options =>
-            //     options.UseSqlServer(ConnectionAndMigration().connectionString, 
-            //         m => m.MigrationsAssembly(ConnectionAndMigration().migrationAssemblyName)));
+            services.AddDbContext<ApplicationDbcontext>(options =>
+                options.UseNpgsql(ConnectionAndMigration().connectionString, 
+                    m => m.MigrationsAssembly(ConnectionAndMigration().migrationAssemblyName)));
             
             // services.AddControllers().AddNewtonsoftJson(options =>
             //     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
