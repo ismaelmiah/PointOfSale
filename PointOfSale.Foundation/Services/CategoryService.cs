@@ -1,0 +1,82 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using PointOfSale.Foundation.Repositories;
+
+namespace PointOfSale.Foundation.Services
+{
+
+    public interface ICategoryService
+    {
+        void AddCategory(Category category);
+        void DeleteCategory(Guid id);
+        IList<Category> Categories();
+        (int total, int totalDisplay, IList<Category> records) GetCategoryList(int pageIndex,
+            int pageSize, string searchText, string orderBy);
+        void UpdateCategory(Category category);
+    }
+
+    public class CategoryService : ICategoryService
+    {
+        private readonly IManagementUnitOfWork _management;
+
+        public CategoryService(IManagementUnitOfWork management)
+        {
+            _management = management;
+        }
+        public void AddCategory(Category category)
+        {
+            _management.CategoryRepository.Add(category);
+            _management.Save();
+        }
+
+        public IList<Category> Categories()
+        {
+            return _management.CategoryRepository.GetAll();
+        }
+
+        public void DeleteCategory(Guid id)
+        {
+            _management.CategoryRepository.Remove(id);
+            _management.Save();
+        }
+
+        public (int total, int totalDisplay, IList<Category> records) GetCategoryList(int pageIndex, int pageSize, string searchText, string orderBy)
+        {
+            (IList<Category> data, int total, int totalDisplay) result;
+
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                result = _management.CategoryRepository.GetDynamic(null,
+                    orderBy, "MonthDetail", pageIndex, pageSize);
+
+            }
+            else
+            {
+                result = _management.CategoryRepository.GetDynamic(x => x.Name == searchText,
+                    orderBy, "MonthDetail", pageIndex, pageSize);
+            }
+
+            var data = (from x in result.data
+                select new Category
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    NoOfProduct = x.NoOfProduct,
+                    Products = x.Products,
+                    StockProduct = x.StockProduct,
+                    Sales = x.Sales,
+                    Invest = x.Invest,
+                    MonthDetail = x.MonthDetail
+                }).ToList();
+
+            return (result.total, result.totalDisplay, data);
+        }
+
+        public void UpdateCategory(Category category)
+        {
+            _management.CategoryRepository.Edit(category);
+            _management.Save();
+        }
+    }
+}

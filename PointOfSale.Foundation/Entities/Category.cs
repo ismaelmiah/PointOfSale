@@ -7,6 +7,7 @@ namespace PointOfSale.Foundation
     public class Category : IEntity<Guid>
     {
         public Guid Id { get; set; }
+        public string Name { get; set; }
         public double Invest { get; set; }
         public int NoOfProduct { get; set; }
         public int StockProduct { get; set; }
