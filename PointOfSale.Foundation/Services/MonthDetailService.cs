@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PointOfSale.Foundation.Repositories;
+using PointOfSale.Foundation.UnitOfWorks;
 
 namespace PointOfSale.Foundation.Services
 {
@@ -10,7 +10,7 @@ namespace PointOfSale.Foundation.Services
     {
         void AddMonthDetail(MonthDetail monthDetail);
         void DeleteMonthDetail(Guid id);
-        IList<MonthDetail> Categories();
+        IList<MonthDetail> MonthDetails();
         (int total, int totalDisplay, IList<MonthDetail> records) GetMonthDetailList(int pageIndex,
             int pageSize, string searchText, string orderBy);
         void UpdateMonthDetail(MonthDetail monthDetail);
@@ -30,7 +30,7 @@ namespace PointOfSale.Foundation.Services
             _management.Save();
         }
 
-        public IList<MonthDetail> Categories()
+        public IList<MonthDetail> MonthDetails()
         {
             return _management.MonthDetailRepository.GetAll();
         }

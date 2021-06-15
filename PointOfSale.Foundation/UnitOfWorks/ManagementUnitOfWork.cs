@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using PointOfSale.DataAccessLayer;
+using PointOfSale.Foundation.Repositories;
 
-namespace PointOfSale.Foundation.Repositories
+
+namespace PointOfSale.Foundation.UnitOfWorks
 {
     public class ManagementUnitOfWork : UnitOfWork, IManagementUnitOfWork
     {

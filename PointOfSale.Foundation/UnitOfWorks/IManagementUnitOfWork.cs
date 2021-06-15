@@ -1,6 +1,7 @@
 using PointOfSale.DataAccessLayer;
+using PointOfSale.Foundation.Repositories;
 
-namespace PointOfSale.Foundation.Repositories
+namespace PointOfSale.Foundation.UnitOfWorks
 {
     public interface IManagementUnitOfWork : IUnitOfWork
     {
