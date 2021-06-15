@@ -9,11 +9,12 @@ namespace PointOfSale.Foundation.Services
     public interface ICategoryService
     {
         void AddCategory(Category category);
-        void DeleteCategory(Guid id);
+        bool DeleteCategory(Guid id);
         IList<Category> Categories();
         (int total, int totalDisplay, IList<Category> records) GetCategoryList(int pageIndex,
             int pageSize, string searchText, string orderBy);
         void UpdateCategory(Category category);
+        Category GetCategory(Guid id);
     }
 
     public class CategoryService : ICategoryService
@@ -35,10 +36,23 @@ namespace PointOfSale.Foundation.Services
             return _management.CategoryRepository.GetAll();
         }
 
-        public void DeleteCategory(Guid id)
+        public bool DeleteCategory(Guid id)
         {
-            _management.CategoryRepository.Remove(id);
-            _management.Save();
+            try
+            {
+                _management.CategoryRepository.Remove(id);
+                _management.Save();
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+        }
+
+        public Category GetCategory(Guid id)
+        {
+            return _management.CategoryRepository.GetById(id);
         }
 
         public (int total, int totalDisplay, IList<Category> records) GetCategoryList(int pageIndex, int pageSize, string searchText, string orderBy)
