@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Reflection;
 using Autofac;
+using PointOfSale.Foundation.Contexts;
 
 namespace PointOfSale.Foundation
 {

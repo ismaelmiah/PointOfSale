@@ -6,7 +6,7 @@ using PointOfSale.Foundation.UnitOfWorks;
 namespace PointOfSale.Foundation.Services
 {
 
-    public interface ICMonthDetailService
+    public interface IMonthDetailService
     {
         void AddMonthDetail(MonthDetail monthDetail);
         void DeleteMonthDetail(Guid id);
@@ -16,7 +16,7 @@ namespace PointOfSale.Foundation.Services
         void UpdateMonthDetail(MonthDetail monthDetail);
     }
 
-    public class MonthDetailService : ICMonthDetailService
+    public class MonthDetailService : IMonthDetailService
     {
         private readonly IManagementUnitOfWork _management;
 

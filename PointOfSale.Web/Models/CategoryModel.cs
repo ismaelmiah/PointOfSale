@@ -21,10 +21,33 @@ namespace PointOfSale.Web.Models
             _categoryService = Startup.AutofacContainer.Resolve<ICategoryService>();
         }
 
-        internal CategoryModel GetCategories(DataTablesAjaxRequestModel tableModel)
+        internal object GetCategories(DataTablesAjaxRequestModel tableModel)
         {
-            //return _categoryService.GetCategoryList()
-            throw new NotImplementedException();
+            var (total, totalDisplay, records) = _categoryService.GetCategoryList(tableModel.PageIndex, tableModel.PageSize, tableModel.SearchText,
+            tableModel.GetSortText(
+                new[]{
+                    "Name",
+                    "NoOfProduct",
+                    "Invest",
+                }
+            ));
+            return new
+            {
+                recordsTotal = total,
+                recordsFiltered = totalDisplay,
+                data = (from record in records
+                        select new object[]
+                        {
+                            record.Name,
+                            record.NoOfProduct,
+                            record.Invest,
+                            record.Sales,
+                            record.StockProduct,
+                            record.Products.Count(),                            
+                            record.Id.ToString(),
+                        }
+                    ).ToArray()
+            };
         }
 
         internal CategoryModel BuildEditCategoryModel(Guid guid)

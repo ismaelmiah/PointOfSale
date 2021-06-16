@@ -18,7 +18,7 @@ namespace PointOfSale.Web
         {
             var webExecutingAssembly = Assembly.GetExecutingAssembly();
 
-            builder.RegisterAssemblyTypes(webExecutingAssembly).Where(x => x.Namespace != null && x.Namespace.Contains("Models")).AsSelf();
+            builder.RegisterAssemblyTypes(webExecutingAssembly).Where(x => x.Namespace != null && x.Namespace.Contains("PointOfSale.Web.Models")).AsSelf();
 
             base.Load(builder);
         }

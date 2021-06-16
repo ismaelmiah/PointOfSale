@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using PointOfSale.Foundation.Contexts;
 using PointOfSale.Foundation;
 
 namespace PointOfSale.Web

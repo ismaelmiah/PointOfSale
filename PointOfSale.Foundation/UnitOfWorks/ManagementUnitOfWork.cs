@@ -1,5 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using PointOfSale.DataAccessLayer;
+using PointOfSale.Foundation.Contexts;
 using PointOfSale.Foundation.Repositories;
 
 
@@ -8,7 +8,7 @@ namespace PointOfSale.Foundation.UnitOfWorks
     public class ManagementUnitOfWork : UnitOfWork, IManagementUnitOfWork
     {
         public ManagementUnitOfWork(
-            DbContext dbContext,
+            ApplicationDbcontext dbContext,
             IProductRepository productRepository,
             ISaleDetailRepository saleDetailRepository,
             ICategoryRepository categoryRepository,

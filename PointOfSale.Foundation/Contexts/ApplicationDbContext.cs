@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace PointOfSale.Foundation
+namespace PointOfSale.Foundation.Contexts
 {
     public class ApplicationDbcontext : DbContext, IApplicationDbContext
     {
