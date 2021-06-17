@@ -10,15 +10,18 @@ $(document).ready(function () {
         }).done(function (response) {
             $("#contentArea").html(response);
             $("#modal-upsert").modal('toggle');
-            LoadFunctionsForUpsert();
+            $("#categorySubmit").click(function (){
+                var form = $("#categoryForm");
+                form.submit();
+            });
+        
         }).fail(function (xhr, ajaxOptions, thrownError) {
             console.log(xhr.status);
             console.log(thrownError);
         });
     });
 
-
-    $('#myTable').DataTable({
+    dataTable = $('#myTable').DataTable({
         "processing": true,
         "serverSide": true,
         "ajax": "/Category/GetAllData",
@@ -28,25 +31,44 @@ $(document).ready(function () {
                 "targets": 6,
                 "render": function (data, type, row) {
                     return `
-                                    <button type="submit" class="btn btn-warning courseEdit btn-sm" data-id='${data}' value='${data}'>
-                                        Edit
-                                    </button>
-                                    <button type="submit" class="btn btn-danger btn-sm show-bs-modal" href="#" data-id='${data}' value='${data}'>
-                                        Delete
-                                    </button>`;
+                            <button type="submit" class="btn btn-warning categoryEdit btn-sm" data-id='${data}' value='${data}'>
+                                Edit
+                            </button>
+                            <button type="submit" class="btn btn-danger btn-sm show-bs-modal" href="#" data-id='${data}' value='${data}'>
+                                Delete
+                            </button>`;
                 }
             }
         ]
     });
+
+    $('#myTable').on('click', '.show-bs-modal', function (event) {
+        var id = $(this).data("id");
+        Delete(`/Category/delete?id=${id}`);
+    });
+
+    $('#myTable').on('click', '.categoryEdit', function (event) {
+        var id = $(this).data("id");
+        var modal = $("#modal-Upsert");
+        modal.modal('show');
+        $.ajax({
+            method: "GET",
+            url: "Category/Upsert?id="+id
+        }).done(function (response) {
+            $("#contentArea").html(response);
+            $("#modal-upsert").modal('toggle');
+
+            $("#categorySubmit").click(function (){
+                var form = $("#categoryForm");
+                form.submit();
+            });
+        }).fail(function (xhr, ajaxOptions, thrownError) {
+            console.log(xhr.status);
+            console.log(thrownError);
+        });
+    });
 });
 
-function LoadFunctionsForUpsert()
-{
-    $("#categorySubmit").click(function (){
-        var form = $("#categoryForm");
-        form.submit();
-    });
-}
 
 function Delete(url) {
     swal({

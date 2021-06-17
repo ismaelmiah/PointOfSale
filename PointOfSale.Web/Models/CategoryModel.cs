@@ -50,9 +50,13 @@ namespace PointOfSale.Web.Models
             };
         }
 
-        internal CategoryModel BuildEditCategoryModel(Guid guid)
+        internal CategoryModel BuildEditCategoryModel(Guid id)
         {
-            throw new NotImplementedException();
+            var category = _categoryService.GetCategory(id);
+            return new CategoryModel{
+                Name = category.Name,
+                Id = category.Id
+            };
         }
 
         public Guid Id { get; set; }
@@ -96,12 +100,12 @@ namespace PointOfSale.Web.Models
         internal void UpdateCategory(Guid id, CategoryModel model)
         {
             var category = _categoryService.GetCategory(id);
-            category.Invest = model.Invest;
+            //category.Invest = model.Invest;
             category.Name = model.Name;
-            category.NoOfProduct = model.NoOfProduct;
-            category.Sales = model.Sales;
-            category.StockProduct = model.StockProduct;
-            category.Products = listOfProducts(model.Products);
+            // category.NoOfProduct = model.NoOfProduct;
+            // category.Sales = model.Sales;
+            // category.StockProduct = model.StockProduct;
+            // category.Products = listOfProducts(model.Products);
 
             _categoryService.UpdateCategory(category);
         }
