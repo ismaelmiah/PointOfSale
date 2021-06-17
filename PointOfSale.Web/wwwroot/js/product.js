@@ -1,60 +1,73 @@
 ﻿var dataTable;
 
 $(document).ready(function () {
-    $('#exampleModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget);
-        var recipient = button.data('whatever');
-        var modal = $(this);
-        modal.find("#Product_Id").val(recipient);
+    $("#addproduct").on('click', function () {
+        var modal = $("#modal-upsert");
+        modal.modal('show');
+        $.ajax({
+            method: "GET",
+            url: "/Product/Upsert"
+        }).done(function (response) {
+            $("#contentArea").html(response);
+            $("#modal-upsert").modal('toggle');
+            $("#Submit").click(function (){
+                var form = $("#productForm");
+                if(form.valid()){
+                    form.submit();
+                }
+            });
+        }).fail(function (xhr, ajaxOptions, thrownError) {
+            console.log(xhr.status);
+            console.log(thrownError);
+        });
     });
-    loadDataTable();
-});
 
-
-function loadDataTable() {
     dataTable = $('#myTable').DataTable({
-        "ajax": {
-            "url": "/Product/GetAllData"
-        },
-        "retrieve": true,
-        "columns": [
-            { "data": "dateOfEntry", "width": "15%" },
-            { "data": "name", "width": "15%" },
-            { "data": "category.name", "width": "10%" },
-            { "data": "price", "width": "10%" },
-            { "data": "quantity", "width": "10%" },
+        "processing": true,
+        "serverSide": true,
+        "ajax": "/Product/GetAllData",
+        "columnDefs": [
             {
-                "data": "id",
+                "orderable": false,
+                "targets": 5,
                 "render": function (data, type, row) {
-                    if (row.quantity === 0){
-                        return `
-                            <div class="text-center">
-                                <a href="/Product/Details/${data}" class="btn btn-info text-white" style="cursor:pointer">
-                                    <i class="fas fa-info-circle"></i> DETAIL
-                                </a>
-                                <button type="button" disabled="disabled" class="btn btn-warning" data-toggle="modal"
-                                data-target="#exampleModal" data-whatever="${data}" ><i class="fas fa-minus-circle"></i> Stock Out</button>\r\n
-                            </div>
-                           `;
-                    } else {
-                        return `
-                            <div class="text-center">
-                                <a href="/Product/Details/${data}" class="btn btn-info text-white" style="cursor:pointer">
-                                    <i class="fas fa-info-circle"></i> DETAIL
-                                </a>
-                                <button type="button" class="btn btn-success" data-toggle="modal"
-                                data-target="#exampleModal" data-whatever="${data}" ><i class="fas fa-minus-circle"></i> SALE</button>\r\n
-                            </div>
-                           `;
-                    }
-                }, "width": "20%"
+                    return `
+                            <button type="submit" class="btn btn-warning productEdit btn-sm" data-id='${data}' value='${data}'>
+                                Edit
+                            </button>
+                            <button type="submit" class="btn btn-danger btn-sm show-bs-modal" href="#" data-id='${data}' value='${data}'>
+                                Delete
+                            </button>`;
+                }
             }
-        ],
-        "language": {
-            "sLengthMenu": "Show _MENU_"
-        }
+        ]
     });
-}
+
+    $('#myTable').on('click', '.show-bs-modal', function (event) {
+        var id = $(this).data("id");
+        Delete(`/Product/delete?id=${id}`);
+    });
+
+    $('#myTable').on('click', '.productEdit', function (event) {
+        var id = $(this).data("id");
+        var modal = $("#modal-Upsert");
+        modal.modal('show');
+        $.ajax({
+            method: "GET",
+            url: "Product/Upsert?id="+id
+        }).done(function (response) {
+            $("#contentArea").html(response);
+            $("#modal-upsert").modal('toggle');
+            $("#Submit").click(function (){
+                var form = $("#productForm");
+                form.submit();
+            });
+        }).fail(function (xhr, ajaxOptions, thrownError) {
+            console.log(xhr.status);
+            console.log(thrownError);
+        });
+    });
+});
 
 
 function Delete(url) {
@@ -63,7 +76,7 @@ function Delete(url) {
         text: "You won't be able to revert this!",
         icon: 'warning',
         buttons: true,
-        dangerMode:true
+        dangerMode: true
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
@@ -71,11 +84,11 @@ function Delete(url) {
                 url: url,
                 success: function (data) {
                     if (data.success) {
-                        window.toastr.success(data.message);
+                        toastr.success(data.message);
                         dataTable.ajax.reload();
                     }
                     else {
-                        window.toastr.error(data.message);
+                        toastr.error(data.message);
                     }
                 }
             });

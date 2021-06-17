@@ -5,17 +5,6 @@ using PointOfSale.Foundation.UnitOfWorks;
 
 namespace PointOfSale.Foundation.Services
 {
-
-    public interface IProductService
-    {
-        void AddProduct(Product Product);
-        void DeleteProduct(Guid id);
-        IList<Product> Products();
-        (int total, int totalDisplay, IList<Product> records) GetProductList(int pageIndex,
-            int pageSize, string searchText, string orderBy);
-        void UpdateProduct(Product Product);
-    }
-
     public class ProductService : IProductService
     {
         private readonly IManagementUnitOfWork _management;
@@ -35,10 +24,18 @@ namespace PointOfSale.Foundation.Services
             return _management.ProductRepository.GetAll();
         }
 
-        public void DeleteProduct(Guid id)
+        public bool DeleteProduct(Guid id)
         {
-            _management.ProductRepository.Remove(id);
-            _management.Save();
+            try
+            {
+                _management.ProductRepository.Remove(id);
+                _management.Save();
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
         }
 
         public (int total, int totalDisplay, IList<Product> records) GetProductList(int pageIndex, int pageSize, string searchText, string orderBy)
@@ -53,7 +50,7 @@ namespace PointOfSale.Foundation.Services
             }
             else
             {
-                result = _management.ProductRepository.GetDynamic(x => x.Price.ToString() == searchText,
+                result = _management.ProductRepository.GetDynamic(x => x.Name.ToString() == searchText,
                     orderBy, "Category", pageIndex, pageSize);
             }
 
@@ -61,8 +58,8 @@ namespace PointOfSale.Foundation.Services
                 select new Product
                 {
                     Id = x.Id,
+                    Name = x.Name,
                     Price = x.Price,
-                    SaleDetail = x.SaleDetail,
                     Quantity = x.Quantity,
                     CategoryId = x.CategoryId,
                     Category = x.Category
@@ -76,5 +73,7 @@ namespace PointOfSale.Foundation.Services
             _management.ProductRepository.Edit(Product);
             _management.Save();
         }
+
+        public Product GetProduct(Guid id) => _management.ProductRepository.GetById(id);
     }
 }

@@ -1,4 +1,7 @@
 @model CategoryModel
+@{
+    ViewData["subtitle"] = Model.Id != new Guid() ? "Update Category": "Create Category";
+}
 
 <div class="modal-header">
     <h4 class="modal-title">@ViewData["subtitle"]</h4>

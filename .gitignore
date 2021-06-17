@@ -4,4 +4,4 @@
 /Migrations
 .fake
 .ionide
-**/log
+**/Logs

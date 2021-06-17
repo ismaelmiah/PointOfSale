@@ -1,0 +1,76 @@
+@model ProductModel
+
+@{
+    ViewData["subtitle"] = Model.Id != new Guid() ? "Update Product" : "Create Product";
+}
+
+<div class="modal-header">
+    <h4 class="modal-title">@ViewData["subtitle"]</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="box-header">
+        <div class="callout callout-danger">
+            <p><b>Note:</b> Provide Name, Buy Price, Quantity Of Product</p>
+        </div>
+    </div>
+    <form id="productForm" asp-action="Upsert" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row p-3">
+            @if (!Model.Id.Equals(default(Guid)))
+            {
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="CategoryId" />
+            }
+            <div class="col-12 row form-group">
+                <div class="col-8 row">
+                    <div class="col-3">
+                        <label asp-for="Name"></label>
+                    </div>
+                    <div class="col-9">
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-4 row">
+                    <div class="col-4">
+                        <label asp-for="Price"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 row form-group">
+                <div class="col-8 row">
+                    <div class="col-3">
+                        <label class="col-form-label">Category</label>
+                    </div>
+                    <div class="col-9">
+                        <select asp-for="CategoryId" asp-items="Model.CategoryList" class="form-control">
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-4 row">
+                    <div class="col-4">
+                        <label class="text-right" asp-for="Quantity"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Quantity" class="form-control" />
+                        <span asp-validation-for="Quantity" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button type="button" id="Submit" class="btn btn-primary">@(Model.Id != new Guid() ? "Update": "Create")
+    </button>
+</div>
