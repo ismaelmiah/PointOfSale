@@ -1,52 +1,36 @@
 @model CategoryModel
 
-<form asp-action="Upsert" asp-controller="Category" method="post" enctype="multipart/form-data">
-    <div class="row p-3 border">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        @if (!Model.Id.Equals(default(Guid)))
-        {
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="NoOfProduct" />
-            <input type="hidden" asp-for="Invest" />
-            <input type="hidden" asp-for="StockProduct" />
-            <input type="hidden" asp-for="Sales" />
-            <input type="hidden" asp-for="Products" />
-        }
-        <div class="col-6 row">
-            <div class="col-8 row">
-                <div class="col-4">
-                    <label asp-for="Name"></label>
-                </div>
-                <div class="col-8">
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-4 row">
-                @if (!Model.Id.Equals(default(Guid)))
-                {
-                    <button type = "submit"
-                            onclick = "return validateInput()" class=
-                            "btn btn-warning form-control col" >Update</button>
-                    <button type="submit"
-                            onclick="location.href = '@Url.Action("Data", "Category")'" class="btn btn-primary form-control col ml-2">
-                        Reset
-                    </button>
-                }
-                else
-                {
-                    <button type = "submit"
-                            onclick = "return validateInput()" class=
-                            "btn btn-success form-control" >Add</button>
-                }
-            </div>
+<div class="modal-header">
+    <h4 class="modal-title">@ViewData["subtitle"]</h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="box-header">
+        <div class="callout callout-danger">
+            <p><b>Note:</b> Provide Name Of Category</p>
         </div>
     </div>
-</form>
-
-
-@section Scripts
-{
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-}
+    <form asp-action="Upsert" asp-controller="Category" id="categoryForm" method="post" enctype="multipart/form-data">
+        <div class="row p-3">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @if (!Model.Id.Equals(default(Guid)))
+            {
+                <input type="hidden" asp-for="Id" />
+            }
+            <div class="col-4 text-right">
+                <label asp-for="Name"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button type="button" id="categorySubmit" class="btn btn-primary">@(Model.Id != new Guid() ? "Update": "Create")
+    </button>
+</div>

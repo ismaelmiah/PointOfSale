@@ -1,6 +1,23 @@
 var dataTable;
 
 $(document).ready(function () {
+    $("#addcategory").on('click', function () {
+        var modal = $("#modal-upsert");
+        modal.modal('show');
+        $.ajax({
+            method: "GET",
+            url: "/Category/Upsert"
+        }).done(function (response) {
+            $("#contentArea").html(response);
+            $("#modal-upsert").modal('toggle');
+            LoadFunctionsForUpsert();
+        }).fail(function (xhr, ajaxOptions, thrownError) {
+            console.log(xhr.status);
+            console.log(thrownError);
+        });
+    });
+
+
     $('#myTable').DataTable({
         "processing": true,
         "serverSide": true,
@@ -26,6 +43,14 @@ $(document).ready(function () {
         ]
     });
 });
+
+function LoadFunctionsForUpsert()
+{
+    $("#categorySubmit").click(function (){
+        var form = $("#categoryForm");
+        form.submit();
+    });
+}
 
 function Delete(url) {
     swal({

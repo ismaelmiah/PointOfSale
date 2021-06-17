@@ -67,11 +67,7 @@ namespace PointOfSale.Web.Models
         {
             var category = new Category()
             {
-                Invest = model.Invest,
-                NoOfProduct = model.NoOfProduct,
-                StockProduct = model.StockProduct,
-                Sales = model.Sales,
-                Products = listOfProducts(model.Products)
+                Name = model.Name
             };
 
             _categoryService.AddCategory(category);
