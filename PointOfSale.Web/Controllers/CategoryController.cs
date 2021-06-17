@@ -55,13 +55,6 @@ namespace PointOfSale.Web.Controllers
             return View();
         }
 
-        public IActionResult Details(Guid id)
-        {
-            var model = new CategoryModel();
-            var data = model.DetailsCategory(id);
-            return PartialView(model);
-        }
-
         [HttpDelete]
         public IActionResult Delete(Guid id)
         {

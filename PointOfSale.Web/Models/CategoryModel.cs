@@ -86,8 +86,6 @@ namespace PointOfSale.Web.Models
             }).ToList();
         }
 
-
-
         private List<ProductModel> listOfProductModels(List<Product> products)
         {
             return products.Select(x => new ProductModel{
@@ -108,20 +106,6 @@ namespace PointOfSale.Web.Models
             // category.Products = listOfProducts(model.Products);
 
             _categoryService.UpdateCategory(category);
-        }
-
-        internal CategoryModel DetailsCategory(Guid id)
-        {
-            var category = _categoryService.GetCategory(id);
-            return new CategoryModel
-            {
-                Name = category.Name,
-                Invest = category.Invest,
-                StockProduct = category.StockProduct,
-                Sales = category.Sales,
-                Products = listOfProductModels(category.Products),
-                NoOfProduct = category.NoOfProduct,                
-            };
         }
 
         internal bool DeleteCategory(Guid id)
