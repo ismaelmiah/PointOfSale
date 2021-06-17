@@ -29,13 +29,9 @@ $(document).ready(function () {
                 "render": function (data, type, row) {
                     return `
                                     <button type="submit" class="btn btn-warning courseEdit btn-sm" data-id='${data}' value='${data}'>
-                                        <i class="fas fa-pencil-alt">
-                                        </i>
                                         Edit
                                     </button>
                                     <button type="submit" class="btn btn-danger btn-sm show-bs-modal" href="#" data-id='${data}' value='${data}'>
-                                        <i class="fas fa-trash">
-                                        </i>
                                         Delete
                                     </button>`;
                 }

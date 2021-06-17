@@ -3,11 +3,11 @@
     "tasks": [
         {
             "label": "build",
-            "command": "dotnet",
+            "command": "/usr/bin/dotnet",
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/PointOfSale/PointOfSale.csproj",
+                "${workspaceFolder}/PointOfSale.Web/PointOfSale.Web.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -15,11 +15,11 @@
         },
         {
             "label": "publish",
-            "command": "dotnet",
+            "command": "/usr/bin/dotnet",
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/PointOfSale/PointOfSale.csproj",
+                "${workspaceFolder}/PointOfSale.Web/PointOfSale.Web.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -27,12 +27,12 @@
         },
         {
             "label": "watch",
-            "command": "dotnet",
+            "command": "/usr/bin/dotnet",
             "type": "process",
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/PointOfSale/PointOfSale.csproj",
+                "${workspaceFolder}/PointOfSale.Web/PointOfSale.Web.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

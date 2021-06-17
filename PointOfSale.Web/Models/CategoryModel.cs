@@ -43,7 +43,7 @@ namespace PointOfSale.Web.Models
                             record.Invest,
                             record.Sales,
                             record.StockProduct,
-                            record.Products.Count(),                            
+                            record.Products != null ? record.Products.Count() : 0,
                             record.Id.ToString(),
                         }
                     ).ToArray()
