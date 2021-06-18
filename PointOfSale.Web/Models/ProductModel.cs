@@ -58,6 +58,7 @@ namespace PointOfSale.Web.Models
                             record.Price,
                             record.Quantity,
                             record.Category.Name,
+                            record.SaleDetail == null ? 0 : record.SaleDetail.Quantity,
                             record.Id.ToString(),
                         }
                     ).ToArray()
@@ -96,8 +97,8 @@ namespace PointOfSale.Web.Models
                 Name = product.Name,
                 Price = product.Price,
                 Quantity = product.Quantity,
-                CategoryId = product.CategoryId,
                 CategoryList = BuildCategoryList(product.CategoryId),
+                CategoryId = product.CategoryId,
                 Id = product.Id
             };
         }
