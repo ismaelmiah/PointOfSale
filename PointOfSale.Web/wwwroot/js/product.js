@@ -32,6 +32,9 @@ $(document).ready(function () {
                 "targets": 5,
                 "render": function (data, type, row) {
                     return `
+                            <button type="submit" class="btn btn-success productSale btn-sm" data-id='${data}' value='${data}'>
+                                Sale Product
+                            </button>
                             <button type="submit" class="btn btn-warning productEdit btn-sm" data-id='${data}' value='${data}'>
                                 Edit
                             </button>
@@ -46,6 +49,26 @@ $(document).ready(function () {
     $('#myTable').on('click', '.show-bs-modal', function (event) {
         var id = $(this).data("id");
         Delete(`/Product/delete?id=${id}`);
+    });
+
+    $('#myTable').on('click', '.productSale', function (event) {
+        var id = $(this).data("id");
+        var modal = $("#modal-Upsert");
+        modal.modal('show');
+        $.ajax({
+            method: "GET",
+            url: "SaleDetail/Upsert"
+        }).done(function (response) {
+            $("#contentArea").html(response);
+            $("#modal-upsert").modal('toggle');
+            $("#Submit").click(function (){
+                var form = $("#saledetailForm");
+                form.submit();
+            });
+        }).fail(function (xhr, ajaxOptions, thrownError) {
+            console.log(xhr.status);
+            console.log(thrownError);
+        });
     });
 
     $('#myTable').on('click', '.productEdit', function (event) {

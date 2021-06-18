@@ -9,11 +9,12 @@ namespace PointOfSale.Foundation.Services
     public interface ISaleDetailService
     {
         void AddSaleDetail(SaleDetail saleDetail);
-        void DeleteSaleDetail(Guid id);
+        bool DeleteSaleDetail(Guid id);
         IList<SaleDetail> SaleDetails();
         (int total, int totalDisplay, IList<SaleDetail> records) GetSaleDetailList(int pageIndex,
             int pageSize, string searchText, string orderBy);
         void UpdateSaleDetail(SaleDetail saleDetail);
+        SaleDetail GetSaleDetails(Guid id);
     }
 
     public class SaleDetailService : ISaleDetailService
@@ -35,10 +36,19 @@ namespace PointOfSale.Foundation.Services
             return _management.SaleDetailRepository.GetAll();
         }
 
-        public void DeleteSaleDetail(Guid id)
+        public bool DeleteSaleDetail(Guid id)
         {
-            _management.SaleDetailRepository.Remove(id);
-            _management.Save();
+            try
+            {
+                _management.SaleDetailRepository.Remove(id);
+                _management.Save();
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return false;                
+                throw;
+            }
         }
 
         public (int total, int totalDisplay, IList<SaleDetail> records) GetSaleDetailList(int pageIndex, int pageSize, string searchText, string orderBy)
@@ -75,5 +85,7 @@ namespace PointOfSale.Foundation.Services
             _management.SaleDetailRepository.Edit(SaleDetail);
             _management.Save();
         }
+
+        public SaleDetail GetSaleDetails(Guid id) => _management.SaleDetailRepository.GetById(id);
     }
 }

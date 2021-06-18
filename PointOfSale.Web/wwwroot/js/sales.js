@@ -6,33 +6,52 @@ $(document).ready(function () {
 
 
 function loadDataTable() {
+    
     dataTable = $('#myTable').DataTable({
-        "ajax": {
-            "url": "/Order/GetAllData"
-        },
-        "retrieve": true,
-        "columns": [
-            { "data": "saleDate", "width": "20%" },
-            { "data": "product.name", "width": "20%" },
-            { "data": "quantity", "width": "10%" },
-            { "data": "product.price", "width": "10%" },
-            { "data": "price", "width": "10%" },
+        "processing": true,
+        "serverSide": true,
+        "ajax": "/SaleDetail/GetAllData",
+        "columnDefs": [
             {
-                "data": "id",
-                "render": function (data) {
+                "orderable": false,
+                "targets": 5,
+                "render": function (data, type, row) {
                     return `
-                            <div class="text-center">
-                                <a onclick=Delete("/Order/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
-                                    <i class="fas fa-trash-alt"></i> 
-                                </a>
-                            </div>
-                           `;
-                }, "width": "10%"
+                            <button type="submit" class="btn btn-warning saledetailEdit btn-sm" data-id='${data}' value='${data}'>
+                                Edit
+                            </button>
+                            <button type="submit" class="btn btn-danger btn-sm show-bs-modal" href="#" data-id='${data}' value='${data}'>
+                                Delete
+                            </button>`;
+                }
             }
-        ],
-        "language": {
-            "sLengthMenu": "Show _MENU_"
-        }
+        ]
+    });
+
+    $('#myTable').on('click', '.show-bs-modal', function (event) {
+        var id = $(this).data("id");
+        Delete(`/SaleDetail/delete?id=${id}`);
+    });
+
+
+    $('#myTable').on('click', '.saledetailEdit', function (event) {
+        var id = $(this).data("id");
+        var modal = $("#modal-Upsert");
+        modal.modal('show');
+        $.ajax({
+            method: "GET",
+            url: "SaleDetail/Upsert?id="+id
+        }).done(function (response) {
+            $("#contentArea").html(response);
+            $("#modal-upsert").modal('toggle');
+            $("#Submit").click(function (){
+                var form = $("#saledetailForm");
+                form.submit();
+            });
+        }).fail(function (xhr, ajaxOptions, thrownError) {
+            console.log(xhr.status);
+            console.log(thrownError);
+        });
     });
 }
 
