@@ -9,11 +9,12 @@ namespace PointOfSale.Foundation.Services
     public interface IMonthDetailService
     {
         void AddMonthDetail(MonthDetail monthDetail);
-        void DeleteMonthDetail(Guid id);
+        bool DeleteMonthDetail(Guid id);
         IList<MonthDetail> MonthDetails();
         (int total, int totalDisplay, IList<MonthDetail> records) GetMonthDetailList(int pageIndex,
             int pageSize, string searchText, string orderBy);
         void UpdateMonthDetail(MonthDetail monthDetail);
+        MonthDetail GetMonthDetail(Guid id);
     }
 
     public class MonthDetailService : IMonthDetailService
@@ -35,10 +36,19 @@ namespace PointOfSale.Foundation.Services
             return _management.MonthDetailRepository.GetAll();
         }
 
-        public void DeleteMonthDetail(Guid id)
+        public bool DeleteMonthDetail(Guid id)
         {
-            _management.MonthDetailRepository.Remove(id);
-            _management.Save();
+            try
+            {
+                _management.MonthDetailRepository.Remove(id);
+                _management.Save();
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return false;
+                throw;
+            }
         }
 
         public (int total, int totalDisplay, IList<MonthDetail> records) GetMonthDetailList(int pageIndex, int pageSize, string searchText, string orderBy)
@@ -78,5 +88,7 @@ namespace PointOfSale.Foundation.Services
             _management.MonthDetailRepository.Edit(monthDetail);
             _management.Save();
         }
+
+        public MonthDetail GetMonthDetail(Guid id) => _management.MonthDetailRepository.GetById(id);
     }
 }

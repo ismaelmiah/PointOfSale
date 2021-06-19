@@ -10,15 +10,18 @@ namespace PointOfSale.Web.Models
     public class CategoryModel
     {
         private readonly ICategoryService _categoryService;
+        private readonly IMonthDetailService _monthDetailService;
 
-        public CategoryModel(ICategoryService categoryService)
+        public CategoryModel(ICategoryService categoryService, IMonthDetailService monthDetailService)
         {
             _categoryService = categoryService;
+            _monthDetailService = monthDetailService;
         }
 
         public CategoryModel()
         {
             _categoryService = Startup.AutofacContainer.Resolve<ICategoryService>();
+            _monthDetailService = Startup.AutofacContainer.Resolve<IMonthDetailService>();
         }
 
         internal object GetCategories(DataTablesAjaxRequestModel tableModel)
@@ -74,6 +77,18 @@ namespace PointOfSale.Web.Models
             };
 
             _categoryService.AddCategory(category);
+
+            var monthDetails = new MonthDetail()
+            {
+                Balance = 0,
+                Category = category,
+                DateOfDetails = DateTime.UtcNow,
+                Invest = 0,
+                Profit = 0,
+                Loss = 0
+            };
+
+            _monthDetailService.AddMonthDetail(monthDetails);
         }
 
         private List<Product> listOfProducts(List<ProductModel> products)
