@@ -12,17 +12,20 @@ namespace PointOfSale.Web.Models
     {
         private readonly ISaleDetailService _saleDetailService;
         private readonly IProductService _productService;
+        private readonly ICategoryService _categoryService;
 
-        public SaleDetailModel(ISaleDetailService saleDetailService, IProductService productService)
+        public SaleDetailModel(ISaleDetailService saleDetailService, IProductService productService, ICategoryService categoryService)
         {
             _saleDetailService = saleDetailService;
             _productService = productService;
+            _categoryService = categoryService;
         }
 
         public SaleDetailModel()
         {
             _saleDetailService = Startup.AutofacContainer.Resolve<ISaleDetailService>();
             _productService = Startup.AutofacContainer.Resolve<IProductService>();
+            _categoryService = Startup.AutofacContainer.Resolve<ICategoryService>();
         }
 
         public Guid Id { get; set; }
@@ -32,8 +35,6 @@ namespace PointOfSale.Web.Models
         public Guid ProductId { get; set; }
         [Display(Name = "Product Name")]
         public string ProductName { get; set; }
-        public SelectList ProductList { get; set; }        
-
         internal object GetAllSaleDetails(DataTablesAjaxRequestModel tableModel)
         {
             var (total, totalDisplay, records) = _saleDetailService.GetSaleDetailList(tableModel.PageIndex, tableModel.PageSize, tableModel.SearchText,
@@ -65,45 +66,77 @@ namespace PointOfSale.Web.Models
         internal SaleDetailModel BuildEditSaleDetailModel(Guid id)
         {
             var saleDetail = _saleDetailService.GetSaleDetails(id);
-            return new SaleDetailModel
+            if(saleDetail == null)
             {
-                Price = saleDetail.Price,
-                Quantity = saleDetail.Quantity,
-                ProductList = BuildProductList(saleDetail.ProductId),
-                ProductId = saleDetail.ProductId,
-                Id = saleDetail.Id
-            };
-        }
-
-        private SelectList BuildProductList(object productId = null)
-        {
-            var products = _productService.Products();
-            return new SelectList(products, "Id", "Name", productId);
+                var product = _productService.GetProduct(id);
+            
+                return new SaleDetailModel
+                {
+                    Price = 0,
+                    Quantity = 1,
+                    ProductName = product.Name,
+                    ProductId = id
+                };
+            }
+            else{
+                return new SaleDetailModel
+                {
+                    Id = id,
+                    Price = saleDetail.Price,
+                    Quantity = saleDetail.Quantity,
+                    ProductName = saleDetail.Product.Name,
+                    ProductId = saleDetail.ProductId
+                };
+            }
         }
 
         internal void SaveSaleDetail(SaleDetailModel model)
         {
-            var saleDetail = new SaleDetail()
+            try
             {
-                Price = model.Price,
-                Quantity = model.Quantity,
-                SaleDate = DateTime.UtcNow,
-                ProductId = model.ProductId
-            };
+                var product = _productService.GetProduct(model.ProductId);
+                var saleDetail = new SaleDetail()
+                {
+                    Quantity = model.Quantity,
+                    Price = model.Price * model.Quantity,
+                    SaleDate = DateTime.UtcNow,
+                    ProductId = model.ProductId
+                };
 
-            _saleDetailService.AddSaleDetail(saleDetail);
+                _saleDetailService.AddSaleDetail(saleDetail);
+
+                product.Quantity -= model.Quantity;
+                _productService.UpdateProduct(product);
+
+                var categories = _categoryService.GetCategory(product.CategoryId);
+                categories.StockProduct -= model.Quantity;
+                categories.Sales += saleDetail.Price;
+
+                _categoryService.UpdateCategory(categories);
+            }
+            catch (System.Exception ex)
+            {
+                throw ex;
+            }
         }
 
         internal void UpdateSaleDetail(Guid id, SaleDetailModel model)
         {
-            var saleDetail = _saleDetailService.GetSaleDetails(id);
+            try
+            {
+                var saleDetail = _saleDetailService.GetSaleDetails(id);
+                var product = _productService.GetProduct(saleDetail.ProductId);
+                saleDetail.ProductId = model.ProductId;
+                saleDetail.Quantity = model.Quantity;
+                saleDetail.SaleDate = model.SaleDate;
+                saleDetail.Price = model.Price;
 
-            saleDetail.ProductId = model.ProductId;
-            saleDetail.Quantity = model.Quantity;
-            saleDetail.SaleDate = model.SaleDate;
-            saleDetail.Price = model.Price;
-
-            _saleDetailService.UpdateSaleDetail(saleDetail);
+                _saleDetailService.UpdateSaleDetail(saleDetail);
+            }
+            catch (System.Exception ex)
+            {
+                throw ex;
+            }
         }
 
         internal bool DeleteSaleDetail(Guid id)

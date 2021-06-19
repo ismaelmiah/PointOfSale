@@ -1,5 +1,5 @@
 using System;
-using System.ComponentModel;
+using System.Collections.Generic;
 using PointOfSale.DataAccessLayer;
 
 namespace PointOfSale.Foundation
@@ -12,6 +12,6 @@ namespace PointOfSale.Foundation
         public int Quantity { get; set; }
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }
-        public virtual SaleDetail SaleDetail { get; set; }
+        public virtual ICollection<SaleDetail> SaleDetails { get; set; }
     }
 }

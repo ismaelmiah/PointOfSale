@@ -32,9 +32,11 @@ namespace PointOfSale.Foundation.Contexts
 
             builder.Entity<SaleDetail>()
             .HasOne(x => x.Product)
-            .WithOne(x => x.SaleDetail)
-            .HasForeignKey<SaleDetail>(x => x.ProductId)
-            .IsRequired();
+            .WithMany(x => x.SaleDetails)
+            .HasForeignKey(x => x.ProductId)
+            .HasPrincipalKey(x => x.Id)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         }
         public DbSet<Category> Categories { get; set; }

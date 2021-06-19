@@ -58,7 +58,7 @@ namespace PointOfSale.Web.Models
                             record.Price,
                             record.Quantity,
                             record.Category.Name,
-                            record.SaleDetail == null ? 0 : record.SaleDetail.Quantity,
+                            record.SaleDetails == null ? record.Quantity : record.SaleDetails.Where(x => x.ProductId == record.Id).Select(x => x.Quantity),
                             record.Id.ToString(),
                         }
                     ).ToArray()
@@ -76,6 +76,13 @@ namespace PointOfSale.Web.Models
             };
 
             _productService.AddProduct(product);
+
+            var category = _categoryService.GetCategory(model.CategoryId);
+            category.Invest += ((product.Quantity) * (product.Price));
+            category.NoOfProduct += product.Quantity;
+            category.StockProduct += product.Quantity;
+
+            _categoryService.UpdateCategory(category);
         }
 
         internal void UpdateProduct(Guid id, ProductModel model)

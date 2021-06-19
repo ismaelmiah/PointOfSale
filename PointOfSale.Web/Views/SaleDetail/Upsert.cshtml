@@ -16,37 +16,39 @@
             <p><b>Note:</b> Provide <b>Sale Price</b>, <b>No Of Quantity</b> to Sale</p>
         </div>
     </div>
-    <form id="saledetailForm" asp-controller="SaleDetail" asp-action="Upsert" method="post" enctype="multipart/form-data">
+    <form id="saledetailForm" asp-controller="SaleDetail" asp-action="Upsert" method="post"
+        enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="row p-3">
             @if (!Model.Id.Equals(default(Guid)))
             {
                 <input type="hidden" asp-for="Id" />
             }
-            <div class="col-12 row form-group">
-                <div class="col-4 row">
-                    <div class="col-3">
-                        <label asp-for="ProductName"></label>
-                    </div>
-                    <div class="col-9">
-                        <input asp-for="ProductName" class="form-control" />
-                        <span asp-validation-for="ProductName" class="text-danger"></span>
-                    </div>
+                <input type="hidden" asp-for="ProductId" />
+            <div class="col row">
+                <div class="col-5">
+                    <label asp-for="ProductName"></label>
                 </div>
-                <div class="col-4 row">
+                <div class="col">
+                    <input disabled asp-for="ProductName" class="form-control" />
+                    <span asp-validation-for="ProductName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col row">
+                <div class="col row">
                     <div class="col-3">
                         <label asp-for="Price"></label>
                     </div>
-                    <div class="col-9">
+                    <div class="col">
                         <input asp-for="Price" class="form-control" />
                         <span asp-validation-for="Price" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-4 row">
-                    <div class="col-4">
+                <div class="col row">
+                    <div class="col-5">
                         <label asp-for="Quantity"></label>
                     </div>
-                    <div class="col-8">
+                    <div class="col">
                         <input asp-for="Quantity" class="form-control" />
                         <span asp-validation-for="Quantity" class="text-danger"></span>
                     </div>
@@ -54,7 +56,6 @@
             </div>
         </div>
     </form>
-
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

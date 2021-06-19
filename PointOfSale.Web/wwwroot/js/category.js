@@ -28,7 +28,7 @@ $(document).ready(function () {
         "columnDefs": [
             {
                 "orderable": false,
-                "targets": 6,
+                "targets": 5,
                 "render": function (data, type, row) {
                     return `
                             <button type="submit" class="btn btn-warning categoryEdit btn-sm" data-id='${data}' value='${data}'>

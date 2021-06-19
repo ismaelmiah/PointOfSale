@@ -57,7 +57,7 @@ $(document).ready(function () {
         modal.modal('show');
         $.ajax({
             method: "GET",
-            url: "SaleDetail/Upsert"
+            url: "SaleDetail/Upsert?id="+id
         }).done(function (response) {
             $("#contentArea").html(response);
             $("#modal-upsert").modal('toggle');

@@ -39,11 +39,10 @@ namespace PointOfSale.Web.Models
                         select new object[]
                         {
                             record.Name,
-                            record.NoOfProduct,
+                            record.Products != null ? record.Products.Count() : 0,
+                            record.StockProduct,
                             record.Invest,
                             record.Sales,
-                            record.StockProduct,
-                            record.Products != null ? record.Products.Count() : 0,
                             record.Id.ToString(),
                         }
                     ).ToArray()
