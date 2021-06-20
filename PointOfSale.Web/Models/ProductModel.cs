@@ -12,17 +12,20 @@ namespace PointOfSale.Web.Models
     {
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
+        private readonly IMonthDetailService _monthDetailService;
 
-        public ProductModel(IProductService productService, ICategoryService categoryService)
+        public ProductModel(IProductService productService, ICategoryService categoryService, IMonthDetailService monthDetailService)
         {
             _productService = productService;
             _categoryService = categoryService;
+            _monthDetailService = monthDetailService;
         }
 
         public ProductModel()
         {
             _productService = Startup.AutofacContainer.Resolve<IProductService>();
             _categoryService = Startup.AutofacContainer.Resolve<ICategoryService>();
+            _monthDetailService = Startup.AutofacContainer.Resolve<IMonthDetailService>();
             CategoryList = BuildCategoryList();
         }
 
@@ -83,6 +86,13 @@ namespace PointOfSale.Web.Models
             category.StockProduct += product.Quantity;
 
             _categoryService.UpdateCategory(category);
+
+
+            var monthDetails = _monthDetailService.MonthDetails().FirstOrDefault(x => x.CategoryId == category.Id);
+            monthDetails.Invest += category.Invest;
+            monthDetails.Loss += ((product.Quantity) * (product.Price));
+
+            _monthDetailService.UpdateMonthDetail(monthDetails);
         }
 
         internal void UpdateProduct(Guid id, ProductModel model)
@@ -94,6 +104,19 @@ namespace PointOfSale.Web.Models
             product.CategoryId = model.CategoryId;
 
             _productService.UpdateProduct(product);
+
+            var category = _categoryService.GetCategory(product.CategoryId);
+            category.Invest += ((product.Quantity) * (product.Price));
+            category.NoOfProduct += product.Quantity;
+            category.StockProduct += product.Quantity;
+
+            _categoryService.UpdateCategory(category);
+
+            var monthDetails = _monthDetailService.MonthDetails().FirstOrDefault(x => x.CategoryId == category.Id);
+            monthDetails.Invest += category.Invest;
+            monthDetails.Loss += ((product.Quantity) * (product.Price));
+
+            _monthDetailService.UpdateMonthDetail(monthDetails);
         }
 
         internal ProductModel BuildEditProductModel(Guid id)
@@ -118,6 +141,17 @@ namespace PointOfSale.Web.Models
 
         internal bool DeleteProduct(Guid id)
         {
+            var product = _productService.GetProduct(id);
+            if (product == null) return false;
+            var category = _categoryService.GetCategory(product.CategoryId);
+            category.Invest -= ((product.Quantity) * (product.Price));
+            category.NoOfProduct -= product.Quantity;
+            category.StockProduct -= product.Quantity;
+
+            var monthDetail = _monthDetailService.MonthDetails().FirstOrDefault(x => x.CategoryId == category.Id);
+            monthDetail.Invest += category.Invest;
+            monthDetail.Loss += ((product.Quantity) * (product.Price));
+
             return _productService.DeleteProduct(id);
         }
     }
