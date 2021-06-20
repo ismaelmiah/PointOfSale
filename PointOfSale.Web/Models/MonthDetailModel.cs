@@ -35,9 +35,9 @@ namespace PointOfSale.Web.Models
             var (total, totalDisplay, records) = _monthDetailService.GetMonthDetailList(tableModel.PageIndex, tableModel.PageSize, tableModel.SearchText,
             tableModel.GetSortText(
                 new[]{
-                    "SaleDate",
-                    "Price",
-                    "Quantity",
+                    "Category",
+                    "Invest",
+                    "Loss",
                 }
             ));
             return new
@@ -47,8 +47,12 @@ namespace PointOfSale.Web.Models
                 data = (from record in records
                         select new object[]
                         {
+                            record.Category.Name,
+                            record.Invest,
+                            record.Profit,
+                            record.Loss,
                             record.Balance,
-                            record.Id.ToString(),
+                            record.DateOfDetails.ToShortDateString()
                         }
                     ).ToArray()
             };

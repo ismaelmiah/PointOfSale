@@ -58,13 +58,13 @@ namespace PointOfSale.Foundation.Services
             if (string.IsNullOrWhiteSpace(searchText))
             {
                 result = _management.MonthDetailRepository.GetDynamic(null,
-                    orderBy, "MonthDetail", pageIndex, pageSize);
+                    orderBy, "Category", pageIndex, pageSize);
 
             }
             else
             {
                 result = _management.MonthDetailRepository.GetDynamic(x => x.Invest.ToString() == searchText,
-                    orderBy, "MonthDetail", pageIndex, pageSize);
+                    orderBy, "Category", pageIndex, pageSize);
             }
 
             var data = (from x in result.data

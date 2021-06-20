@@ -7,32 +7,15 @@ $(document).ready(function () {
 
 function loadDataTable() {
     dataTable = $('#myTable').DataTable({
-        "ajax": {
-            "url": "/Administration/GetAllResult"
-        },
-        "retrieve": true,
-        "columns": [
-            { "data": "saleDate", "width": "15%" },
-            { "data": "product.name", "width": "20%" },
-            { "data": "quantity", "width": "10%" },
-            { "data": "product.price", "width": "10%" },
-            { "data": "price", "width": "10%" },
+        "processing": true,
+        "serverSide": true,
+        "ajax": "/MonthDetail/GetAllData",
+        "columnDefs": [
             {
-                "data": "id",
-                "render": function (data) {
-                    return `
-                            <div class="text-center">
-                                <a onclick=Delete("/Order/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
-                                    <i class="fas fa-trash-alt"></i> 
-                                </a>
-                            </div>
-                           `;
-                }, "width": "15%"
+                "orderable": false,
+                "targets": 5,
             }
-        ],
-        "language": {
-            "sLengthMenu": "Show _MENU_"
-        }
+        ]
     });
 }
 

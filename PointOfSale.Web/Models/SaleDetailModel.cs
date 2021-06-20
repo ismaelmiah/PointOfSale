@@ -13,12 +13,17 @@ namespace PointOfSale.Web.Models
         private readonly ISaleDetailService _saleDetailService;
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
+        private readonly IMonthDetailService _monthDetailService;
 
-        public SaleDetailModel(ISaleDetailService saleDetailService, IProductService productService, ICategoryService categoryService)
+        public SaleDetailModel(ISaleDetailService saleDetailService,
+         IProductService productService,
+          ICategoryService categoryService,
+          IMonthDetailService monthDetailService)
         {
             _saleDetailService = saleDetailService;
             _productService = productService;
             _categoryService = categoryService;
+            _monthDetailService = monthDetailService;
         }
 
         public SaleDetailModel()
@@ -26,6 +31,7 @@ namespace PointOfSale.Web.Models
             _saleDetailService = Startup.AutofacContainer.Resolve<ISaleDetailService>();
             _productService = Startup.AutofacContainer.Resolve<IProductService>();
             _categoryService = Startup.AutofacContainer.Resolve<ICategoryService>();
+            _monthDetailService = Startup.AutofacContainer.Resolve<IMonthDetailService>();
         }
 
         public Guid Id { get; set; }
@@ -66,10 +72,10 @@ namespace PointOfSale.Web.Models
         internal SaleDetailModel BuildEditSaleDetailModel(Guid id)
         {
             var saleDetail = _saleDetailService.GetSaleDetails(id);
-            if(saleDetail == null)
+            if (saleDetail == null)
             {
                 var product = _productService.GetProduct(id);
-            
+
                 return new SaleDetailModel
                 {
                     Price = 0,
@@ -78,7 +84,8 @@ namespace PointOfSale.Web.Models
                     ProductId = id
                 };
             }
-            else{
+            else
+            {
                 return new SaleDetailModel
                 {
                     Id = id,
@@ -113,6 +120,25 @@ namespace PointOfSale.Web.Models
                 categories.Sales += saleDetail.Price;
 
                 _categoryService.UpdateCategory(categories);
+
+                var monthDetails = _monthDetailService.MonthDetails().FirstOrDefault(x => x.CategoryId == categories.Id);
+                var profit = monthDetails.Loss - saleDetail.Price;
+                if (profit < 0)
+                {
+                    monthDetails.Loss = 0;
+                    monthDetails.Profit = Math.Abs(profit);
+                }
+                else monthDetails.Loss = profit;
+
+                if (monthDetails.Loss == 0)
+                {
+                    monthDetails.Balance = monthDetails.Invest + monthDetails.Profit;
+                }
+                else
+                {
+                    monthDetails.Balance = monthDetails.Invest - monthDetails.Loss;
+                }
+                _monthDetailService.UpdateMonthDetail(monthDetails);
             }
             catch (System.Exception ex)
             {
@@ -126,12 +152,61 @@ namespace PointOfSale.Web.Models
             {
                 var saleDetail = _saleDetailService.GetSaleDetails(id);
                 var product = _productService.GetProduct(saleDetail.ProductId);
+                product.Quantity += saleDetail.Quantity;
+
+                var categories = _categoryService.GetCategory(product.CategoryId);
+                categories.StockProduct += saleDetail.Quantity;
+                categories.Sales -= saleDetail.Price;
+
+                var monthDetails = _monthDetailService.MonthDetails().FirstOrDefault(x => x.CategoryId == categories.Id);
+                var profit = monthDetails.Loss + saleDetail.Price;
+                if (profit < 0)
+                {
+                    monthDetails.Loss = 0;
+                    monthDetails.Profit = Math.Abs(profit);
+                }
+                else monthDetails.Loss = profit;
+
+                if (monthDetails.Loss == 0)
+                {
+                    monthDetails.Balance = monthDetails.Invest + monthDetails.Profit;
+                }
+                else
+                {
+                    monthDetails.Balance = monthDetails.Invest - monthDetails.Loss;
+                }
                 saleDetail.ProductId = model.ProductId;
                 saleDetail.Quantity = model.Quantity;
                 saleDetail.SaleDate = model.SaleDate;
                 saleDetail.Price = model.Price;
 
                 _saleDetailService.UpdateSaleDetail(saleDetail);
+
+                product.Quantity -= model.Quantity;
+                _productService.UpdateProduct(product);
+
+                categories.StockProduct -= model.Quantity;
+                categories.Sales += saleDetail.Price;
+
+                _categoryService.UpdateCategory(categories);
+
+                profit = monthDetails.Loss - saleDetail.Price;
+                if (profit < 0)
+                {
+                    monthDetails.Loss = 0;
+                    monthDetails.Profit = Math.Abs(profit);
+                }
+                else monthDetails.Loss = profit;
+
+                if (monthDetails.Loss == 0)
+                {
+                    monthDetails.Balance = monthDetails.Invest + monthDetails.Profit;
+                }
+                else
+                {
+                    monthDetails.Balance = monthDetails.Invest - monthDetails.Loss;
+                }
+                _monthDetailService.UpdateMonthDetail(monthDetails);
             }
             catch (System.Exception ex)
             {

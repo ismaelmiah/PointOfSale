@@ -62,7 +62,7 @@ namespace PointOfSale.Web.Controllers
             var IsSucceed = model.DeleteCategory(id);
             return (Json(IsSucceed
                 ? new { success = true, message = "Delete Operation Successfully" }
-                : new { success = false, message = "Category Not Found! / Delete All Products" }));
+                : new { success = false, message = "Category Delete Problem" }));
         }
     }
 }

@@ -91,33 +91,10 @@ namespace PointOfSale.Web.Models
             _monthDetailService.AddMonthDetail(monthDetails);
         }
 
-        private List<Product> listOfProducts(List<ProductModel> products)
-        {
-            return products.Select(x => new Product{
-                Price = x.Price,
-                Quantity = x.Quantity,
-                CategoryId = x.CategoryId
-            }).ToList();
-        }
-
-        private List<ProductModel> listOfProductModels(List<Product> products)
-        {
-            return products.Select(x => new ProductModel{
-                Price = x.Price,
-                Quantity = x.Quantity,
-                CategoryId = x.CategoryId
-            }).ToList();
-        }
-
         internal void UpdateCategory(Guid id, CategoryModel model)
         {
             var category = _categoryService.GetCategory(id);
-            //category.Invest = model.Invest;
             category.Name = model.Name;
-            // category.NoOfProduct = model.NoOfProduct;
-            // category.Sales = model.Sales;
-            // category.StockProduct = model.StockProduct;
-            // category.Products = listOfProducts(model.Products);
 
             _categoryService.UpdateCategory(category);
         }
