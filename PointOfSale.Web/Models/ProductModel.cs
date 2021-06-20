@@ -89,7 +89,7 @@ namespace PointOfSale.Web.Models
 
 
             var monthDetails = _monthDetailService.MonthDetails().FirstOrDefault(x => x.CategoryId == category.Id);
-            monthDetails.Invest += category.Invest;
+            monthDetails.Invest += ((product.Quantity) * (product.Price));
             monthDetails.Loss += ((product.Quantity) * (product.Price));
 
             _monthDetailService.UpdateMonthDetail(monthDetails);
@@ -98,6 +98,16 @@ namespace PointOfSale.Web.Models
         internal void UpdateProduct(Guid id, ProductModel model)
         {
             var product = _productService.GetProduct(id);
+
+            var category = _categoryService.GetCategory(product.CategoryId);
+            category.Invest -= ((product.Quantity) * (product.Price));
+            category.NoOfProduct -= product.Quantity;
+            category.StockProduct -= product.Quantity;
+
+            var monthDetails = _monthDetailService.MonthDetails().FirstOrDefault(x => x.CategoryId == category.Id);
+            monthDetails.Invest -= ((product.Quantity) * (product.Price));
+            monthDetails.Loss -= ((product.Quantity) * (product.Price));
+
             product.Name = model.Name;
             product.Price = model.Price;
             product.Quantity = model.Quantity;
@@ -105,15 +115,15 @@ namespace PointOfSale.Web.Models
 
             _productService.UpdateProduct(product);
 
-            var category = _categoryService.GetCategory(product.CategoryId);
+            //var category = _categoryService.GetCategory(product.CategoryId);
             category.Invest += ((product.Quantity) * (product.Price));
             category.NoOfProduct += product.Quantity;
             category.StockProduct += product.Quantity;
 
             _categoryService.UpdateCategory(category);
 
-            var monthDetails = _monthDetailService.MonthDetails().FirstOrDefault(x => x.CategoryId == category.Id);
-            monthDetails.Invest += category.Invest;
+            //var monthDetails = _monthDetailService.MonthDetails().FirstOrDefault(x => x.CategoryId == category.Id);
+            monthDetails.Invest += ((product.Quantity) * (product.Price));
             monthDetails.Loss += ((product.Quantity) * (product.Price));
 
             _monthDetailService.UpdateMonthDetail(monthDetails);
@@ -149,8 +159,8 @@ namespace PointOfSale.Web.Models
             category.StockProduct -= product.Quantity;
 
             var monthDetail = _monthDetailService.MonthDetails().FirstOrDefault(x => x.CategoryId == category.Id);
-            monthDetail.Invest += category.Invest;
-            monthDetail.Loss += ((product.Quantity) * (product.Price));
+            monthDetail.Invest -= ((product.Quantity) * (product.Price));
+            monthDetail.Loss -= ((product.Quantity) * (product.Price));
 
             return _productService.DeleteProduct(id);
         }

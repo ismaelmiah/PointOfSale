@@ -41,6 +41,7 @@ namespace PointOfSale.Web.Models
         public Guid ProductId { get; set; }
         [Display(Name = "Product Name")]
         public string ProductName { get; set; }
+        public int QuantityMax { get; set; }
         internal object GetAllSaleDetails(DataTablesAjaxRequestModel tableModel)
         {
             var (total, totalDisplay, records) = _saleDetailService.GetSaleDetailList(tableModel.PageIndex, tableModel.PageSize, tableModel.SearchText,
@@ -72,14 +73,14 @@ namespace PointOfSale.Web.Models
         internal SaleDetailModel BuildEditSaleDetailModel(Guid id)
         {
             var saleDetail = _saleDetailService.GetSaleDetails(id);
+            var product = _productService.GetProduct(id);
             if (saleDetail == null)
             {
-                var product = _productService.GetProduct(id);
-
+                var tenPercentagePrice =product.Price + (product.Price * 10)/100;
                 return new SaleDetailModel
                 {
-                    Price = 0,
-                    Quantity = 1,
+                    Price = tenPercentagePrice,
+                    QuantityMax = product.Quantity,
                     ProductName = product.Name,
                     ProductId = id
                 };
@@ -90,6 +91,7 @@ namespace PointOfSale.Web.Models
                 {
                     Id = id,
                     Price = saleDetail.Price,
+                    QuantityMax = product.Quantity,
                     Quantity = saleDetail.Quantity,
                     ProductName = saleDetail.Product.Name,
                     ProductId = saleDetail.ProductId
@@ -216,6 +218,15 @@ namespace PointOfSale.Web.Models
 
         internal bool DeleteSaleDetail(Guid id)
         {
+            var saleDetail = _saleDetailService.GetSaleDetails(id);
+            var product = _productService.GetProduct(saleDetail.ProductId);
+            product.Quantity += saleDetail.Quantity;
+            _productService.UpdateProduct(product);
+
+            var category = _categoryService.GetCategory(product.CategoryId);
+            category.Sales -= saleDetail.Price;
+            _categoryService.UpdateCategory(category);
+            
             return _saleDetailService.DeleteSaleDetail(id);
         }
     }

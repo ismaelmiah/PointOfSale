@@ -22,7 +22,7 @@ namespace PointOfSale.Foundation.Contexts
             .WithMany(x => x.Products)
             .HasForeignKey(x => x.CategoryId)
             .IsRequired()
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<MonthDetail>()
             .HasOne(x => x.Category)
@@ -36,7 +36,7 @@ namespace PointOfSale.Foundation.Contexts
             .HasForeignKey(x => x.ProductId)
             .HasPrincipalKey(x => x.Id)
             .IsRequired()
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         }
         public DbSet<Category> Categories { get; set; }

@@ -2,6 +2,11 @@
 
 $(document).ready(function () {
     loadDataTable();
+
+    $("#Quantity").on("chnage", function()
+    {
+        console.log(this);
+    });
 });
 
 

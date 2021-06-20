@@ -49,7 +49,7 @@
                         <label asp-for="Quantity"></label>
                     </div>
                     <div class="col">
-                        <input asp-for="Quantity" class="form-control" />
+                        <input asp-for="Quantity" min="1" max="@Model.QuantityMax" class="form-control" />
                         <span asp-validation-for="Quantity" class="text-danger"></span>
                     </div>
                 </div>
