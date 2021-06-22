@@ -76,7 +76,7 @@ namespace PointOfSale.Web.Models
             var product = _productService.GetProduct(id);
             if (saleDetail == null)
             {
-                var tenPercentagePrice =product.Price + (product.Price * 10)/100;
+                var tenPercentagePrice = product.Price + (product.Price * 10) / 100;
                 return new SaleDetailModel
                 {
                     Price = tenPercentagePrice,
@@ -212,7 +212,7 @@ namespace PointOfSale.Web.Models
             }
             catch (System.Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -226,7 +226,6 @@ namespace PointOfSale.Web.Models
             var category = _categoryService.GetCategory(product.CategoryId);
             category.Sales -= saleDetail.Price;
             _categoryService.UpdateCategory(category);
-            
             return _saleDetailService.DeleteSaleDetail(id);
         }
     }
