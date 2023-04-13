@@ -49,7 +49,7 @@ namespace PointOfSale.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbcontext>(options =>
-                options.UseNpgsql(ConnectionAndMigration().connectionString, 
+                options.UseSqlServer(ConnectionAndMigration().connectionString, 
                     m => m.MigrationsAssembly(ConnectionAndMigration().migrationAssemblyName)));
             
             // services.AddControllers().AddNewtonsoftJson(options =>

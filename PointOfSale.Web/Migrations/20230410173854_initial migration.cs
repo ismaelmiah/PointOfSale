@@ -1,9 +1,11 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace PointOfSale.Web.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class initialmigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,11 +13,12 @@ namespace PointOfSale.Web.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Invest = table.Column<double>(type: "double precision", nullable: false),
-                    NoOfProduct = table.Column<int>(type: "integer", nullable: false),
-                    StockProduct = table.Column<int>(type: "integer", nullable: false),
-                    Sales = table.Column<double>(type: "double precision", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Invest = table.Column<double>(type: "float", nullable: false),
+                    NoOfProduct = table.Column<int>(type: "int", nullable: false),
+                    StockProduct = table.Column<int>(type: "int", nullable: false),
+                    Sales = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -26,13 +29,13 @@ namespace PointOfSale.Web.Migrations
                 name: "MonthDetails",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Profit = table.Column<double>(type: "double precision", nullable: false),
-                    Loss = table.Column<double>(type: "double precision", nullable: false),
-                    Invest = table.Column<double>(type: "double precision", nullable: false),
-                    Balance = table.Column<double>(type: "double precision", nullable: false),
-                    DateOfDetails = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Profit = table.Column<double>(type: "float", nullable: false),
+                    Loss = table.Column<double>(type: "float", nullable: false),
+                    Invest = table.Column<double>(type: "float", nullable: false),
+                    Balance = table.Column<double>(type: "float", nullable: false),
+                    DateOfDetails = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,10 +52,11 @@ namespace PointOfSale.Web.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Price = table.Column<double>(type: "double precision", nullable: false),
-                    Quantity = table.Column<int>(type: "integer", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -62,18 +66,18 @@ namespace PointOfSale.Web.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "SaleDetails",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Quantity = table.Column<int>(type: "integer", nullable: false),
-                    Price = table.Column<double>(type: "double precision", nullable: false),
-                    SaleDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    SaleDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -100,8 +104,7 @@ namespace PointOfSale.Web.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_SaleDetails_ProductId",
                 table: "SaleDetails",
-                column: "ProductId",
-                unique: true);
+                column: "ProductId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

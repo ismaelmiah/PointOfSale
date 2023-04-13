@@ -13,7 +13,7 @@ namespace PointOfSale.Foundation.Contexts
             _migrationAssemblyName = migrationAssemblyName;
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql(_connectionString, m => m.MigrationsAssembly(_migrationAssemblyName));
+            => optionsBuilder.UseSqlServer(_connectionString, m => m.MigrationsAssembly(_migrationAssemblyName));
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
